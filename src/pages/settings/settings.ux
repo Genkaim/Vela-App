@@ -1,0 +1,151 @@
+<template>
+  <div class="page">
+    <input class="back" type="button" value="" onclick="goBack" />
+    <text class="line1">设置</text>
+    <text class="line2">电子木鱼v1.0.2</text>
+    <text class="line3">Designed by Genkaim@genkaim.top</text>
+    <div class="section">
+      <text class="title">开启震动....</text>
+      <switch checked="{{$app.$def.data.enable_vibrate}}" class="switch" @change="changeVirate"></switch>
+    </div>
+    <div class="section">
+      <text class="title">使用动画....</text>
+      <switch checked="{{$app.$def.data.enable_ani}}" class="switch" @change="changeAni"></switch>
+    </div>
+    <div class="section">
+      <text class="title">信仰rp之神</text>
+      <switch checked="{{$app.$def.data.is_rp}}" class="switch" @change="changeRp"></switch>
+    </div>
+    <input class="clear" type="button" value="删佛祖的库" onclick="toConfirm" />
+  </div>
+</template>
+<script>
+  import router from '@system.router'
+  export default {
+    goBack(event) {
+      router.back()
+    },
+    changeVirate(e) {
+      this.$app.$def.data.enable_vibrate = e.checked;
+    },
+    changeRp(e) {
+      this.$app.$def.data.is_rp = e.checked;
+    },
+    changeAni(e) {
+      this.$app.$def.data.enable_ani = e.checked;
+    },
+    toConfirm(event) {
+      router.push({
+            uri: '/pages/confirm'
+          })
+    }
+  }
+</script>
+
+<style>
+.page {
+  position: absolute;
+  background-color: black;
+  display: flex;
+  flex-direction: column;
+  display: flex;
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 */
+}
+.clear {
+  color: white;
+  font-size: 50px;
+  position: relative;
+  top: 110px;
+  margin-top: 20px;
+  background-color: rgb(25, 25, 25);
+  width:500px;
+  height: 100px;
+}
+.switch {
+  left: 60px;
+  height: 90px;
+  width: 140px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  margin-right: 50px;
+}
+.section .title {
+  font-size: 60px;
+  position: relative;
+  margin-right: 10px;
+  margin-left: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.section{
+  position: relative;
+  top: 100px;
+  background-color: rgb(25, 25, 25);
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-radius: 40px;
+  margin-left: 10px;
+  margin-top: 5px;
+}
+  /*
+  width: 380px ;
+  height: 100px ;
+  font-size: 60px;
+  top: 50px;
+  border-radius: 20px;
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}*/
+
+.back {
+  position: absolute;
+  left: 0px;
+  top: 10px;
+  background-color: black;
+  color: white;
+  font-size: 80px;
+  font-weight: bold;
+  background-image: url('/common/icon-back.png');
+}
+.line1 {
+  position: relative;
+  color: white;
+  font-size: 120px;
+  font-weight: bold;
+  top: 60px;
+}
+.line2 {
+  position: relative;
+  font-size: 40px;
+  font-weight: bold;
+  left: 0px;
+  top: 90px;
+  margin: 0px;
+}
+.line3 {
+  position: relative;
+  font-size: 30px;
+  left: 0px ;
+  top: 70px;
+  margin: 10px;
+}
+text {
+  position: relative;
+  color: white;
+}
+.dsf1 {
+  position: relative;
+  top: 170px;
+}
+</style>

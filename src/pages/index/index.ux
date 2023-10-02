@@ -1,0 +1,173 @@
+<template>
+  <div class="page">
+      <input class="muyu" type="button" onclick="rpPlusPlus()" />
+      <text class="title">电子木鱼</text>
+      <text if="{{local_is_rp}}" class="cnt" >rp {{localCnt}}</text>
+      <text else class="cnt" >功德 {{localCnt}}</text>
+    <input class="settings" type="button" onclick="goToSettings()" />
+    <text if="{{plus && local_enable_ani}}" class="showPlus">{{str_mes}}</text>
+  </div>
+</template>
+
+<script>
+  import prompt from '@system.prompt'  //弹窗模块
+  import vibrator from '@system.vibrator' //震动模块
+  import router from '@system.router' 
+  import storage from '@system.storage'
+  function stringToBool(str) {
+    if (str.toLowerCase() === "true") return true;
+    if (str.toLowerCase() === "false") return false;
+    throw new Error("Invalid string value for boolean conversion");
+}
+  export default {
+    public: {
+      localCnt: 0,
+      plus: false,
+      local_is_rp: false,
+      local_enable_ani: false,
+      local_enable_vibrate: true,
+      str_mes: '功德+1',
+      str_vib: 'short',
+      list_mes: {false: '功德+1', true: 'rp++'},
+      list_vib: {false: 'N', true: 'short'},
+    },
+    goToSettings(event) {
+      router.push({
+          uri: '/pages/settings'
+        })
+    },
+    onInit() {
+      var self = this
+      this.localCnt = this.$app.$def.data.rpCount
+      this.local_is_rp = this.$app.$def.data.is_rp
+      this.local_enable_vibrate = this.$app.$def.data.enable_vibrate
+      this.local_enable_ani = this.$app.$def.data.enable_ani
+      storage.get({
+        key: 'genkaim_muyu_cnt',
+        success: function(e) {
+          e && (self.localCnt = parseInt(e))
+        },
+        fail: function() { }
+      })
+      storage.get({
+        key: 'genkaim_config_rp',
+        success: function(e) {
+          e && (self.local_is_rp = stringToBool(e))
+          self.str_mes = self.list_mes[stringToBool(e)]
+        },
+        fail: function() { }
+      })
+      storage.get({
+        key: 'genkaim_config_vibrate',
+        success: function(e) {
+          e && (self.local_enable_vibrate = stringToBool(e))
+          self.str_vib = self.list_vib[stringToBool(e)]
+        },
+        fail: function() { }
+      })
+      storage.get({
+        key: 'genkaim_config_ani',
+        success: function(e) {
+          e && (self.local_enable_ani = stringToBool(e))
+        },
+        fail: function() { }
+      })
+    },
+    onShow() {
+      this.localCnt = this.$app.$def.data.rpCount
+      this.local_is_rp = this.$app.$def.data.is_rp
+      this.local_enable_vibrate = this.$app.$def.data.enable_vibrate
+      this.local_enable_ani = this.$app.$def.data.enable_ani
+      this.str_mes = this.list_mes[this.local_is_rp]
+      this.str_vib = this.list_vib[this.local_enable_vibrate]
+    },
+    rpPlusPlus(event) {
+      this.plus = true;
+      this.localCnt++;
+      this.$app.$def.data.rpCount = this.localCnt;
+      setTimeout(() => {
+          this.plus = false;
+      }, 400);
+      
+      if (!this.local_enable_ani) {
+          prompt.showToast({
+              message: this.str_mes,
+              duration: 200
+          });
+      }
+      
+      vibrator.vibrate({
+          mode: this.str_vib
+      });
+    }
+  }
+</script>
+
+<style>
+  .page {
+    background-color: black;
+    display: flex;
+    flex-direction: column;
+    display: flex;
+    justify-content: center; /* 水平居中 */
+    align-items: center; /* 垂直居中 */
+    height: 100%; /* 确保容器占满整个视窗 */
+  }
+  .title, .cnt {
+    position: absolute;
+    color: white;
+    display: flex;
+    justify-content: center; /* 水平居中 */
+  }
+  .title {
+    font-weight: bold;
+    top: 30px;
+    font-size: 50px;
+  }
+  .cnt {
+    font-size: 70px;
+    bottom: 100px;
+  }
+  .muyu {
+    position: absolute;
+    background-color: black;
+    display: flex;
+    justify-content: center; /* 水平居中 */
+    top: 250px;
+    width: 450px;
+    height: 350px;/*350px */
+    background-image: url('muyu.png');
+  }
+
+  .settings {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    height: 100px;
+    width: 100px;
+    background-image: url('/common/icon-settings.png');
+  }
+  .showPlus {
+    position: absolute;
+    right: 70px;
+    top: 210px;
+    color: white;
+    font-weight: bold;
+    animation-name: moveUp;
+    animation-delay: 0s;
+    animation-duration: 200ms;
+    animation-iteration-count: 1;
+  }
+  @keyframes moveUp {
+    0% {
+      transform: translateY(0);
+    }
+    99% {
+      transform: translateY(-40px);
+    }
+    100% {
+      visibility: hidden;
+    }
+  }
+
+</style>
