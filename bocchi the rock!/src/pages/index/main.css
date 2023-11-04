@@ -1,0 +1,102 @@
+    @import url(animation.css);
+    .hongxia {
+        z-index: -1;
+        position: absolute;
+        height: 100%;
+        width: 100%;
+    }
+    .hongxia1 {
+        z-index: -1;
+        position: absolute;
+        background-image: url('resource/hongxia_1.png');
+        height: 100%;
+        width: 100%;
+    }
+    .hongxia2 {
+        z-index: -1;
+        position: absolute;
+        background-image: url('resource/hongxia_2.png');
+        height: 100%;
+        width: 100%;
+    }
+    /* 新添加的元素开始时会向上偏移400px并且透明 */
+    .main {
+        width: 100%;
+        height: 100%;
+        background-color: black;
+        display: flex;
+        flex-direction: column;
+        display: flex;
+        justify-content: center; /* 水平居中 */
+        align-items: center; /* 垂直居中 */
+        height: 100%; /* 确保容器占满整个视窗 */
+    }
+    .info {
+        color: rgb(255, 255, 255);
+        top:-200px;
+    }
+    .pressure {
+        color: white;
+    }
+    .control {
+        z-index: 10000;
+        position: absolute;
+        bottom: 50px;
+        width: 150px;
+        height: 200px;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.462);
+    }
+    .daizi {
+        position: absolute;
+        top: -100px;
+        left: 200px;
+        width: 150px;
+        height: 190px;
+        border-radius: 50%;
+        /*
+        background-color: rgb(255, 0, 0);*/
+        background-image: url('resource/daizi.png');
+        animation-name: moveD1;
+        animation-delay: 0s;
+        animation-duration: 700ms;
+        animation-iteration-count: 1;
+        animation-timing-function: ease-in;
+    }
+    .settings {
+        position: absolute;
+        background-color: rgba(47, 47, 47, 0.003);
+        top: 0px;
+        right: 10px;
+        height: 100px;
+        width: 100px;
+        background-image: url('/common/icon-settings.png');
+    }
+    .title {
+        position: absolute;
+        color: white;
+        font-weight: bold;
+        top: 25px;
+    }
+    .back {
+        position: absolute;
+        left: 0px;
+        top: 13px;
+        background-color: transparent;
+        color: white;
+        font-size: 80px;
+        font-weight: bold;
+        background-image: url('/common/icon-back.png');
+    }
+    .buttom {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+    }
+    .test {
+        color: white;
+    }
+    .hide {
+        position: absolute;
+        color: transparent;
+    }

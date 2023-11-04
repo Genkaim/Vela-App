@@ -1,0 +1,69 @@
+<template>
+  <!-- template里只能有一个根节点 -->
+  <div class="page">
+    <input class="back" type="button" value="" onclick="goBack" />
+    <text class="line1">制作人员</text>
+    <text class="line2">@Genkaim</text>
+    <text class="line3">个人博客 &</text>
+    <text class="line4">反馈bug、建议</text>
+    <qrcode class="qrcode" value="https://www.genkaim.top/posts/66c39965"></qrcode>
+  </div>
+</template>
+
+<script>
+  import router from '@system.router'
+  export default {
+    goBack(event) {
+        router.back()
+      }
+  }
+</script>
+
+<style>
+.line1, .line2{
+  position: relative;
+  font-weight: bold;
+}
+.line1 {
+  color: rgb(179, 179, 179);
+  top: 50px;
+}
+.line2 {
+  top: 50px;
+  color: white;
+}
+.line3, .line4 {
+  position: relative;
+  top: 60px;
+  color: white;
+}
+.line4 {
+  margin-bottom: 60px;
+}
+.page {
+  position: absolute;
+  background-color: black;
+  display: flex;
+  flex-direction: column;
+  display: flex;
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 */
+}
+.qrcode {
+  position: relative;
+  margin-top: 30px;
+  width: 340px;
+  height: 340px;
+  color: #2f2f2f;
+}
+.back {
+  position: absolute;
+  left: 0px;
+  top: 10px;
+  background-color: black;
+  color: white;
+  font-size: 80px;
+  font-weight: bold;
+  background-image: url('/common/icon-back.png');
+}
+</style>

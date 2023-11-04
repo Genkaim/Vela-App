@@ -1,0 +1,26 @@
+@keyframes moveHD {
+    0% {
+        transform: translateY(0);
+      }
+    100% {
+        transform: translateY(450px);
+    }
+  }
+  @keyframes moveD1 {
+    0% {
+      transform: translateY(0px);
+    }
+    100% {
+      transform: translateY(490px);
+    }
+  }
+  @keyframes moveD2 {
+    0% {
+      transform: translateY(490px);
+    }
+    100% {
+      transform: translateY(470px);
+    }
+  }
+  
+  
