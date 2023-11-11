@@ -13,7 +13,6 @@ export default {
     enable_vibrate: true,
     enable_ani: false
   },
-  // 监听应用创建,应用创建时调用
   onCreate() { 
     var self = this;
     storage.get({

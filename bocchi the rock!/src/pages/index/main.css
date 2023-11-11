@@ -5,17 +5,17 @@
         height: 100%;
         width: 100%;
     }
-    .hongxia1 {
+    .hongxia0 {
         z-index: -1;
         position: absolute;
-        background-image: url('resource/hongxia_1.png');
+        background-image: url('resource/hongxia-0.png');
         height: 100%;
         width: 100%;
     }
-    .hongxia2 {
+    .hongxia1 {
         z-index: -1;
         position: absolute;
-        background-image: url('resource/hongxia_2.png');
+        background-image: url('resource/hongxia-1.png');
         height: 100%;
         width: 100%;
     }
@@ -32,11 +32,11 @@
         height: 100%; /* 确保容器占满整个视窗 */
     }
     .info {
-        color: rgb(255, 255, 255);
+        color: transparent;
         top:-200px;
     }
     .pressure {
-        color: white;
+        color: transparent;
     }
     .control {
         z-index: 10000;
@@ -45,23 +45,34 @@
         width: 150px;
         height: 200px;
         border-radius: 50%;
-        background-color: rgba(255, 255, 255, 0.462);
+        background-color: rgba(89, 34, 43, 0.1);
     }
-    .daizi {
+    .daizi0 {
         position: absolute;
-        top: -100px;
+        top: 0px;
         left: 200px;
         width: 150px;
         height: 190px;
         border-radius: 50%;
         /*
         background-color: rgb(255, 0, 0);*/
-        background-image: url('resource/daizi.png');
+        background-image: url('resource/daizi-0.png');
         animation-name: moveD1;
         animation-delay: 0s;
         animation-duration: 700ms;
         animation-iteration-count: 1;
         animation-timing-function: ease-in;
+    }
+    .daizi1 {
+        position: absolute;
+        top: 0px;
+        left: 200px;
+        width: 150px;
+        height: 190px;
+        border-radius: 50%;
+        background-image: url('resource/daizi-1.png');
+        /*
+        background-color: rgb(255, 0, 0);*/
     }
     .settings {
         position: absolute;
@@ -99,4 +110,52 @@
     .hide {
         position: absolute;
         color: transparent;
+    }
+    .liang0 {
+        position: absolute;
+        right: -200px;
+        top: 90px;
+        width: 200px;
+        height: 350px;
+        background-image: url('resource/liang-0.png');
+        animation-name: movel;
+        animation-delay: 0s;
+        animation-duration: 1000ms;
+        animation-iteration-count: 1;
+        animation-timing-function: ease-in-out;
+    }
+    .liang1 {
+        position: absolute;
+        right: 0px;
+        top: 90px;
+        width: 200px;
+        height: 350px;
+        background-image: url('resource/liang-1.png');
+    }
+    .liang2 {
+        position: absolute;
+        right: 0px;
+        top: 90px;
+        width: 200px;
+        height: 350px;
+        background-image: url('resource/liang-2.png');
+    }
+    .liang3 {
+        position: absolute;
+        right: 0px;
+        top: 90px;
+        width: 200px;
+        height: 350px;
+        background-image: url('resource/liang-3.png');
+        animation-name: mover;
+        animation-delay: 500ms;
+        animation-duration: 1000ms;
+        animation-iteration-count: 1;
+        animation-timing-function: ease-in-out;
+    }
+    .background {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-image: url('resource/background.png');
     }

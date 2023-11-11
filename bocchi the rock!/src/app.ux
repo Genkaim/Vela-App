@@ -6,32 +6,6 @@ function stringToBool(str) {
     throw new Error("Invalid string value for boolean conversion");
 }
 export default {
-  data: {
-    swipe: false
-  },
-  onCreate() {
-    console.log('app created')
-    var self = this;
-    storage.get({
-      key: 'genkaim_bocchi_swipe',
-      success: function(e) {
-        e && (self.data.swipe = stringToBool(e))
-      },
-      fail: function() { }
-    })
-  },
-  onDestroy() {
-    console.log('app destroyed')
-    storage.set({
-        key: 'genkaim_bocchi_swipe',
-        value: String(this.data.swipe),
-        success: function() {
-          console.log('Data saved successfully');
-        },
-        fail: function(data, code) {
-          console.log(`handling fail, code = ${code}`);
-        }
-      });
-  }
+  onDestroy() { }
 }
 </script>

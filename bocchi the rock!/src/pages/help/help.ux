@@ -1,0 +1,58 @@
+<template>
+    <div class="page">
+      <swiper class="swiper">
+        <image class="item item-1" src="page-0.png" />
+        <image class="item item-2" src="page-1.png" />
+        <image class="item item-3" src="page-2.png" />
+        <image class="item item-4" onclick="goBack" src="page-3.png" />
+      </swiper>
+      <input class="back" type="button" value="" onclick="goBack" />
+    </div>
+</template>
+<script>
+  import router from '@system.router'
+  export default {
+    goBack(event) {
+      router.back()
+    }
+  }
+</script>
+<style>
+  .swiper {
+    width: 100%;
+    height: 100%;
+    indicator-selected-color: pink;
+    indicator-color: grey;
+  }
+
+    .item {
+      text-align: center;
+      color: white;
+      font-size: 30px;
+    }
+    .title {
+          position: absolute;
+          color: white;
+          font-weight: bold;
+          top: 10px;
+      }
+    .page {
+        position: absolute;
+        background-color: black;
+        display: flex;
+        flex-direction: column;
+        display: flex;
+        justify-content: center; /* 水平居中 */
+        align-items: center; /* 垂直居中 */
+    }
+    .back {
+        position: absolute;
+        left: 0px;
+        top: 10px;
+        background-color: rgba(109, 43, 43, 0);
+        color: white;
+        font-size: 80px;
+        font-weight: bold;
+        background-image: url('/common/icon-back.png');
+    }
+</style>

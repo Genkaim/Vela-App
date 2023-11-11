@@ -1,17 +1,23 @@
 <template>
   <div class="page">
     <input class="back" type="button" value="" onclick="goBack" />
-    <div class="header" onclick="goAbout">
-      <text class="line1">Bocchi the Rock!</text>
-      <text class="line2">-</text>
-      <image class="logo" src="" />
+    <div class="header" >
+      <image class="logo" src="/common/_logo.png" />
+      <text class="line1">呆毛无限生长的虹夏!</text>
+      <text class="line1">(beta)</text>
       <!-- <text class="about" onclick="goAbout">关于</text> -->
     </div>
-    <div class="section">
-      <text class="title">enable_swipe....</text>
-      <switch checked="{{$app.$def.data.swipe}}" class="switch" @change="changeSwipe"></switch>
+    <div class="section" onclick="goHelp">
+      <div class="icon-help"></div>
+      <text class="title">操作指引</text>
     </div>
-  
+    <div class="section" onclick="goAbout">
+      <div class="icon-about"></div>
+      <text class="title">关于</text>
+      <!--
+      <switch checked="{{$app.$def.data.swipe}}" class="switch" @change="changeSwipe"></switch>
+      -->
+    </div>
   </div>
 </template>
 <script>
@@ -20,6 +26,11 @@
     goAbout(event){
       router.push({
           uri: '/pages/about'
+        })
+    },
+    goHelp(event){
+      router.push({
+          uri: '/pages/help'
         })
     },
     goBack(event) {
@@ -37,18 +48,43 @@
 </script>
 
 <style>
+.icon-about {
+  position: absolute;
+  left: -130px;
+  top: 18px;
+  background-image: url('/common/icon-about.png');
+  height: 100%;
+  width: 100%;
+}
+.icon-help {
+  position: absolute;
+  left: -130px;
+  top: 18px;
+  background-image: url('/common/icon-help.png');
+  height: 100%;
+  width: 100%;
+}
+.title {
+  font-size: 40px;
+  position: relative;
+  font-weight: bold;
+  left: 75px;
+  margin-left: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
 .header {
-  top: 0px;
-  height: 200px;
-  width: 350px;
+  top: 95px;
+  height: 370px;
+  width: 450px;
   display: flex;
-  background-color: rgba(25, 25, 25, 0.7);
+  background-color: rgb(201, 148, 156);
   border-radius: 40px;
-  /*
-  animation-name: bc;
-    animation-delay: 0s;
-    animation-duration: 10000ms;
-    animation-iteration-count: infinite;*/
+  display: flex;
+  flex-direction: column;
+  display: flex;
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 */
 }
 .about {
   font-size: 30px;
@@ -67,23 +103,12 @@
 .logo {
   margin: 0px;
   position: relative;
-  top: 60px;
-  left: -300px;
 }
 .line1 {
   position: relative;
   font-weight: bold;
-
-  margin: 0px;
-}
-.line2 {
-  color: rgb(194, 194, 194);
-  font-size: 50px;
-  font-weight: bold;
-  position: relative;
-  font-size: 30px;
-  left: 70px ;
-  top:40px;
+  font-size: 35px;
+  margin-top: 20px;
 }
 .page {
   position: absolute;
@@ -112,25 +137,18 @@
   margin-bottom: 10px;
   margin-right: 50px;
 }
-.section .title {
-  font-size: 30px;
-  position: relative;
-  margin-right: 10px;
-  margin-left: 10px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
 .section{
   position: relative;
-  top: 170px;
+  top: 100px;
+  width: 450px;
+  height: 140px;
   background-color: rgb(25, 25, 25);
   padding-left: 30px;
   padding-right: 30px;
   padding-top: 20px;
   padding-bottom: 20px;
-  border-radius: 40px;
-  margin-left: 10px;
-  margin-top: 5px;
+  border-radius: 50px;
+  margin-top: 15px;
 }
   /*
   width: 380px ;

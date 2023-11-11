@@ -1,4 +1,3 @@
-import device from '@system.device' 
 import router from '@system.router' 
 import app from '@system.app' 
 import storage from '@system.storage'
@@ -9,112 +8,152 @@ function stringToBool(str) {
   throw new Error("Invalid string value for boolean conversion");
 }
 function getRandomArbitrary() {
-  let max = 20;
-  let min = -10;
+  let max = 24;
+  let min = -14;
   let rt= Math.random() * (max - min) + min;
   rt = parseFloat(rt.toFixed(1));
   return rt;
 }
 function easeIn(t) {
-  return t * t * t; // 对应于三次贝塞尔曲线(0.42, 0, 1, 1)
+  return t * t * t;
 }
 
 function getTranslateY(time) {
   time = Math.min(1500, time);
-  let progress = time / 1500; // 计算动画进度
-  let easedProgress = easeIn(progress); // 应用ease-in函数
-
-  return easedProgress * 450; // 计算translateY值
+  let progress = time / 1500;
+  let easedProgress = easeIn(progress);
+  return easedProgress * 450;
 }
-let currentIndex = 0;
 export default {
-    public: {
+    protected: {
       num: 0,
       clientX: 250,
-      daizi: true,
+      daizi: 0,
       clientY: 0,
-      width: 0,
-      height: 0,
-      swipe: false,
+      width: 336,
+      height: 480,
       hongxia: 1,
+      liang: -1,
       time: 0,
       reward: 0,
       controlWidth: 150,
       controlHeight: 200,
       circleDiameter: 100,
-      numLimit: 5,
+      numLimit: 3,
       aniDuration: 1500,
       updateCycle: 500,
-      daimaoList: []
+      daimaoList: [],
+      sleepFlag: false,
+      rewardLimit: 3,
+      hongxiaFlag: true,
+      temp: 0x3f3f3f3f
     }, 
     activeHongixa() {
-      var self = this;
-      this.hongxia = 1 - this.hongxia;
-      setTimeout(() => self.activeHongixa(), 2000);
+      if(this.hongxiaFlag)this.hongxia = 1 - this.hongxia;
+      //setTimeout(() => this.activeHongixa(), 2000);
+      setTimeout(this.activeHongixa.bind(this), 2000);
     },
     activeTime() {
-      var self = this;
       this.time += this.updateCycle
-      setTimeout(() => self.activeTime(), this.updateCycle);
+      //setTimeout(() => this.activeTime(), this.updateCycle);
+      setTimeout(this.activeTime.bind(this), this.updateCycle);
     },
     activeDaimao() {
-      var self = this;
-      let temp;
-      for(let i = 0; i < self.daimaoList.length; i++) {
-        if(this.time-self.daimaoList[i].createTime > this.aniDuration){
+      for(let i = 0; i < this.daimaoList.length; i++) {
+        let timeInterval = this.time-this.daimaoList[i].createTime;
+        if(timeInterval > this.aniDuration){
           continue;
         }
-        temp = self.daimaoList[i].left + self.daimaoList[i].add;
-        temp = Math.max(0, Math.min(temp, 380));
-        self.daimaoList[i].left = temp; 
+        let temp = this.daimaoList[i].left + this.daimaoList[i].add;
+        temp = Math.max(0, Math.min(temp, 360));
+        this.daimaoList[i].left = temp; 
+        this.daimaoList[i].top = 150 + getTranslateY(timeInterval); 
       }
-      setTimeout(() => self.activeDaimao(), 50);
+      setTimeout(this.activeDaimao.bind(this), 80);
     },
+    cleanReward() {
+      this.sleepFlag = true;
+      this.reward = 0;
+      this.daizi = -1;
+      this.liang = 3;
+      this.temp = 0x3f3f3f3f;
+      setTimeout(() => { this.daizi = 0; }, 1500);
+      setTimeout(() => { this.liang = -1; }, 1500);
+      setTimeout(() => { this.sleepFlag = false; }, 2300);
+      vibrator.vibrate({mode: 'long'});
+      //tTimeout(() => { vibrator.vibrate({mode: 'short'}); }, 300);
+    },    
     activeCalculate() {
-      var self = this;
-      for(let i = 0; i < self.daimaoList.length; i++) {
-        let timeInterval = this.time-self.daimaoList[i].createTime;
+      var toDelete = []; 
+      var vibrateFlag = false; 
+      for(let i = 0; i < this.daimaoList.length; i++) {
+        let timeInterval = this.time-this.daimaoList[i].createTime;
         let x, y, d;
-        x = self.daimaoList[i].left;
-        y = getTranslateY(timeInterval)+11;
-        y = 475-y;
-        d = Math.abs((x-this.clientX) * (y-this.clientY));
-        if(d < 1500) {
-          vibrator.vibrate({
-            mode: 'short'
-          });
-          self.daimaoList.splice(i, 1);
+        x = this.daimaoList[i].left;
+        y = 540 - this.daimaoList[i].top;
+        d = Math.sqrt(Math.pow(x-this.clientX, 2) + Math.pow(y-this.clientY, 2));
+        if(d < 100) {
+          if (!vibrateFlag) { 
+            vibrator.vibrate({
+              mode: 'short'
+            });
+            vibrateFlag = true; 
+          }
+          toDelete.push(i); 
           this.num--;
           this.reward++;
-          i--;
         }
       }
-      setTimeout(() => self.activeCalculate(), this.updateCycle);
+      for (let i = toDelete.length - 1; i >= 0; i--) {
+        this.daimaoList.splice(toDelete[i], 1);
+      }
+
+      if(this.reward > this.rewardLimit && !this.sleepFlag) {
+        this.daizi = 1;
+        this.liang = 0;
+        this.hongxia = 1;
+        this.hongxiaFlag = false;
+      }
+      else if(!this.sleepFlag) {
+        this.daizi = 0;
+        this.liang = -1;
+        this.temp = this.time
+        this.hongxiaFlag = true;
+      }
+      if(!this.sleepFlag && this.reward > this.rewardLimit && this.time-this.temp > 1000) {
+        let d = Math.sqrt(Math.pow(380-this.clientX, 2) + Math.pow(250-this.clientY, 2));
+        if(d < 400) this.liang = 2;
+        else this.liang = 1;
+        if(d < 100) this.cleanReward();
+      }
+      //setTimeout(() => this.activeCalculate(), this.updateCycle);
+      setTimeout(this.activeCalculate.bind(this), 150);
     },
     onInit() {
+      storage.get({
+        key: 'firstTime',
+        default: 'true',
+        success: function(e) { 
+          if(stringToBool(e)) {
+            storage.set({
+              key: 'firstTime',
+              value: String(false),
+              success: function() { },
+              fail: function(data, code) { }
+            });
+            router.push({
+              uri: '/pages/help'
+            });
+          }
+        },
+        fail: function() { }
+      });
       this.activeTime();
       this.activeHongixa();
       this.activeDaimao();
       this.activeCalculate();
-      var self = this;
-      device.getInfo({
-        success: function(ret) {
-          self.width = ret.screenWidth
-          self.height= ret.screenHeight
-        }
-      });
-      this.swipe = this.$app.$def.data.swipe;
-      storage.get({
-        key: 'genkaim_bocchi_swipe',
-        success: function(e) {
-          e && (self.swipe = stringToBool(e))
-        },
-        fail: function() { }
-      });
     },
-    onShow() {
-      this.swipe = this.$app.$def.data.swipe;
-    },
+    onShow() { },
     at(event) { },
     goBack(event) {
       app.terminate();
@@ -127,7 +166,7 @@ export default {
     createDaimao(event) {
       if(this.num < this.numLimit) {
         this.num++;
-        this.daimaoList.push({uniqueId: this.num, left: 120, add: getRandomArbitrary(), createTime: this.time});
+        this.daimaoList.push({uniqueId: this.num, top: 150, left: 120, add: getRandomArbitrary(), createTime: this.time});
         vibrator.vibrate({
           mode: 'short'
         });

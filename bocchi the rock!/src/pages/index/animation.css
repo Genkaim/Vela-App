@@ -16,10 +16,26 @@
   }
   @keyframes moveD2 {
     0% {
-      transform: translateY(490px);
+      transform: translateY(0px);
     }
     100% {
       transform: translateY(470px);
+    }
+  }
+  @keyframes movel {
+    0% {
+      transform: translateX(0px);
+    }
+    100% {
+      transform: translateX(-200px);
+    }
+  }
+  @keyframes mover {
+    0% {
+      transform: translateX(0px);
+    }
+    100% {
+      transform: translateX(200px);
     }
   }
   
