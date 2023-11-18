@@ -1,8 +1,8 @@
 {
   "package": "com.genkaim.bocchi",
   "name": "呆毛无限生长的虹夏!",
-  "versionName": "0.1.0",
-  "versionCode": 1,
+  "versionName": "0.2.1",
+  "versionCode": 3,
   "minPlatformVersion": 1000,
   "icon": "/common/logo.png",
   "simulationVersion": "default",
@@ -14,7 +14,9 @@
     { "name": "system.sensor" },
     { "name": "system.app" },
     { "name": "system.storage" },
-    { "name": "system.vibrator" }
+    { "name": "system.vibrator" },
+    { "name": "system.brightness" }
+
   ],
   "config": {
     "logLevel": "log",

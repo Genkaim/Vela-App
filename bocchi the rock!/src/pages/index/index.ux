@@ -1,32 +1,74 @@
 <template>
-  <!--  div class="main" @swipe="{{swipe ? at : 1}}">  -->
-  <div class="main">
-    <div class="background"></div>
-    <text class="info">x: {{clientX}}px; y: {{clientY}}px</text>
-    <text class="title">{{reward}}</text>
-    <text class="info">{{time}} ms</text>
-    <div if="{{liang === 0}}" class="liang0"></div>
-    <div if="{{liang === 1}}" class="liang1"></div>
-    <div if="{{liang === 2}}" class="liang2"></div>
-    <div if="{{liang === 3}}" class="liang3"></div>
-    <div class="hongxia" @click="createDaimao">
-      <div class="hongxia0" if="{{hongxia === 0}}"></div>
-      <div class="hongxia1" if="{{hongxia === 1}}"></div>
-    </div>
-    <div class="daimao" style="position: absolute;background-image: url('resource/daimao.png');left: 120px;top: 150px;height: 75px;width: 80px;"></div>
-    <!--
+	<!--  div class="main" @swipe="{{swipe ? at : 1}}">  -->
+	<div class="main">
+		<div class="background"></div>
+		<text class="info">x: {{ clientX }}px; y: {{ clientY }}px</text>
+		<text class="title">{{ reward }} | {{ boqi }}</text>
+		<text class="info">{{ time }} ms</text>
+		<div class="elements">
+			<div if="{{liang === 0}}" class="liang0"></div>
+			<div if="{{liang === 1}}" class="liang1"></div>
+			<div if="{{liang === 2}}" class="liang2"></div>
+			<div if="{{liang === 21}}" class="liang21"></div>
+			<div if="{{liang === 3}}" class="liang3"></div>
+			<div if="{{liang === 31}}" class="liang31"></div>
+			<div if="{{xiduo === 0}}" class="xiduo0"></div>
+			<div if="{{xiduo === 1}}" class="xiduo1"></div>
+			<div if="{{xiduo === 2}}" class="xiduo2"></div>
+			<div if="{{xiduo === 3}}" class="xiduo3"></div>
+		</div>
+		<div class="hongxia" @click="createDaimao">
+			<div class="hongxia0" if="{{hongxia === 0}}"></div>
+			<div class="hongxia1" if="{{hongxia === 1}}"></div>
+		</div>
+		<div
+			class="daimao"
+			style="
+				position: absolute;
+				background-image: url('resource/daimao.png');
+				left: 120px;
+				top: 150px;
+				height: 75px;
+				width: 80px;
+			"
+		></div>
+		<!--
     <text class="info">Info height: {{height}}  width: {{width}}</text>-->
-    <!--
+		<!--
     <div for="{{daimaoList}}" tid="uniqueId" class="daimao1" style="position: absolute;background-image: url('resource/daimao.png');left: {{$item.left}}px;top: {{$item.top}}px;height: 75px;width: 80px;"></div>
     -->
-    <div for="{{daimaoList}}" tid="uniqueId" class="daimao1" style="position: absolute;animation-name: moveHD;animation-delay: 0s;animation-duration: 1500ms;animation-iteration-count: 1;animation-timing-function: ease-in;background-image: url('resource/daimao.png');left: {{$item.left}}px;top: 150px;height: 75px;width: 80px;"></div>
-    <text class="hide" for="{{daimaoList}}">{{$idx}}: {{$item.left}}</text>
-    <div if="{{daizi == 0}}" class="daizi0" style="left: {{clientX}}px; top: -{{clientY}}px"></div>
-    <div if="{{daizi == 1}}" class="daizi1" style="left: {{clientX}}px; top: {{490-clientY}}px"></div>
-    <div class="control" ontouchmove="move"></div>
-    <input class="settings" type="button" onclick="goToSettings()" />
-    <input class="back" type="button" value="" onclick="goBack" />
-  </div>
+		<div
+			for="{{daimaoList}}"
+			tid="uniqueId"
+			class="daimao1"
+			style="position: absolute;animation-name: moveHD;animation-delay: 0s;animation-duration: 1500ms;animation-iteration-count: 1;animation-timing-function: ease-in;background-image: url('resource/daimao.png');left: {{$item.left}}px;top: 150px;height: 75px;width: 80px;"
+		></div>
+		<div
+			for="{{boqiList}}"
+			tid="uniqueId"
+			class="daimao1"
+			style="position: absolute;animation-name: moveHD;animation-delay: 0s;animation-duration: 1500ms;animation-iteration-count: 1;animation-timing-function: ease-in;background-image: url('resource/boqi.png');left: {{$item.left}}px;top: 150px;height: 75px;width: 80px;"
+		></div>
+		<text class="hide" for="{{daimaoList}}">{{ $idx }}: {{ $item.left }}</text>
+		<div
+			if="{{daizi == 0}}"
+			class="daizi0"
+			style="left: {{clientX}}px; top: -{{clientY}}px"
+		></div>
+		<div
+			if="{{daizi == 1}}"
+			class="daizi1"
+			style="left: {{clientX}}px; top: {{470-clientY}}px"
+		></div>
+		<div
+			if="{{daizi == 2}}"
+			class="daizi2"
+			style="left: {{clientX}}px; top: {{470-clientY}}px"
+		></div>
+		<div class="control" ontouchmove="move"></div>
+		<input class="settings" type="button" onclick="goToSettings()" />
+		<input class="back" type="button" value="" onclick="goBack" />
+	</div>
 </template>
 <script src="./main.js"></script>
 <style src="./main.css"></style>

@@ -1,11 +1,25 @@
 <script>
 import storage from '@system.storage'
+import brightness from '@system.brightness' 
 function stringToBool(str) {
     if (str.toLowerCase() === "true") return true;
     if (str.toLowerCase() === "false") return false;
     throw new Error("Invalid string value for boolean conversion");
 }
 export default {
-  onDestroy() { }
+  onCreate() {
+    brightness.setKeepScreenOn({
+      keepScreenOn: true,
+      success: function() { },
+      fail: function(data, code) { }
+    })
+  },
+  onDestroy() { 
+    brightness.setKeepScreenOn({
+      keepScreenOn: false,
+      success: function() { },
+      fail: function(data, code) { }
+    })
+  }
 }
 </script>

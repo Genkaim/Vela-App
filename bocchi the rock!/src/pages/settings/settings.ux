@@ -1,189 +1,111 @@
 <template>
-  <div class="page">
-    <input class="back" type="button" value="" onclick="goBack" />
-    <div class="header" >
-      <image class="logo" src="/common/_logo.png" />
-      <text class="line1">呆毛无限生长的虹夏!</text>
-      <text class="line1">(beta)</text>
-      <!-- <text class="about" onclick="goAbout">关于</text> -->
-    </div>
-    <div class="section" onclick="goHelp">
-      <div class="icon-help"></div>
-      <text class="title">操作指引</text>
-    </div>
-    <div class="section" onclick="goAbout">
-      <div class="icon-about"></div>
-      <text class="title">关于</text>
-      <!--
-      <switch checked="{{$app.$def.data.swipe}}" class="switch" @change="changeSwipe"></switch>
-      -->
-    </div>
-  </div>
+	<div class="page">
+		<input class="back" type="button" value="" onclick="goBack" />
+		<div class="header">
+			<image class="logo" src="/common/_logo.png" />
+			<text class="line1">呆毛无限生长的虹夏!</text>
+			<text class="line1">0.2.1 beta</text>
+			<!-- <text class="about" onclick="goAbout">关于</text> -->
+		</div>
+		<div class="section" onclick="goHelp">
+			<div class="icon-help"></div>
+			<text class="title">操作指引</text>
+		</div>
+		<div class="section" onclick="goAbout">
+			<div class="icon-about"></div>
+			<text class="title">关于</text>
+		</div>
+	</div>
 </template>
 <script>
-  import router from '@system.router'
-  export default {
-    goAbout(event){
-      router.push({
-          uri: '/pages/about'
-        })
-    },
-    goHelp(event){
-      router.push({
-          uri: '/pages/help'
-        })
-    },
-    goBack(event) {
-      router.back()
-    },
-    changeSwipe(e) {
-      this.$app.$def.data.swipe = e.checked;
-    },
-    toConfirm(event) {
-      router.push({
-          uri: '/pages/confirm'
-        })
-    }
-  }
+import router from "@system.router";
+export default {
+	goAbout(event) {
+		router.push({
+			uri: "/pages/about",
+		});
+	},
+	goHelp(event) {
+		router.push({
+			uri: "/pages/help",
+		});
+	},
+	goBack(event) {
+		router.back();
+	},
+	changeSwipe(e) {
+		this.$app.$def.data.swipe = e.checked;
+	}
+};
 </script>
 
 <style>
-.icon-about {
-  position: absolute;
-  left: -130px;
-  top: 18px;
-  background-image: url('/common/icon-about.png');
-  height: 100%;
-  width: 100%;
-}
-.icon-help {
-  position: absolute;
-  left: -130px;
-  top: 18px;
-  background-image: url('/common/icon-help.png');
-  height: 100%;
-  width: 100%;
+text {
+	position: relative;
+	color: white;
 }
 .title {
-  font-size: 40px;
-  position: relative;
-  font-weight: bold;
-  left: 75px;
-  margin-left: 10px;
-  margin-top: 10px;
-  margin-bottom: 10px;
+	font-size: 40px;
+	position: relative;
+	font-weight: bold;
+	left: 75px;
+	margin-left: 10px;
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
 .header {
-  top: 95px;
-  height: 370px;
-  width: 450px;
-  display: flex;
-  background-color: rgb(201, 148, 156);
-  border-radius: 40px;
-  display: flex;
-  flex-direction: column;
-  display: flex;
-  justify-content: center; /* 水平居中 */
-  align-items: center; /* 垂直居中 */
-}
-.about {
-  font-size: 30px;
-  position: relative;
-  padding-left: 20px;
-  right: -10px;
-  width: 100px;
-  top: 200px;
-  font-weight: bold;
-  color: white;
-  position: relative;
-  background-color: rgb(78, 78, 78);
-  border-radius: 35px;
-  height: 174px;
-}
-.logo {
-  margin: 0px;
-  position: relative;
+	top: 95px;
+	height: 370px;
+	width: 450px;
+	display: flex;
+	background-color: rgb(201, 148, 156);
+	border-radius: 40px;
+	display: flex;
+	flex-direction: column;
+	display: flex;
+	justify-content: center; /* 水平居中 */
+	align-items: center; /* 垂直居中 */
 }
 .line1 {
-  position: relative;
-  font-weight: bold;
-  font-size: 35px;
-  margin-top: 20px;
+	position: relative;
+	font-weight: bold;
+	font-size: 35px;
+	margin-top: 20px;
 }
 .page {
-  position: absolute;
-  background-color: black;
-  display: flex;
-  flex-direction: column;
-  display: flex;
-  justify-content: center; /* 水平居中 */
-  align-items: center; /* 垂直居中 */
+	position: absolute;
+	background-color: black;
+	display: flex;
+	flex-direction: column;
+	display: flex;
+	justify-content: center; /* 水平居中 */
+	align-items: center; /* 垂直居中 */
 }
-.clear {
-  color: white;
-  font-size: 50px;
-  position: relative;
-  top: 170px;
-  margin-top: 20px;
-  background-color: rgb(25, 25, 25);
-  width:500px;
-  height: 100px;
+.logo {
+	margin: 0px;
+	position: relative;
 }
-.switch {
-  left: 60px;
-  height: 60px;
-  width: 100px;
-  margin-top: 20px;
-  margin-bottom: 10px;
-  margin-right: 50px;
+.icon-about, .icon-help {
+	position: absolute;
+	left: -130px;
+	top: 18px;
+	height: 100%;
+	width: 100%;
 }
-.section{
-  position: relative;
-  top: 100px;
-  width: 450px;
-  height: 140px;
-  background-color: rgb(25, 25, 25);
-  padding-left: 30px;
-  padding-right: 30px;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  border-radius: 50px;
-  margin-top: 15px;
+.icon-about {
+	background-image: url("/common/icon-about.png");
 }
-  /*
-  width: 380px ;
-  height: 100px ;
-  font-size: 60px;
-  top: 50px;
-  border-radius: 20px;
-  padding-left: 30px;
-  padding-right: 30px;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  margin-left: auto;
-  margin-right: auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}*/
-
+.icon-help {
+	background-image: url("/common/icon-help.png");
+}
 .back {
-  position: absolute;
-  left: 0px;
-  top: 10px;
-  background-color: black;
-  color: white;
-  font-size: 80px;
-  font-weight: bold;
-  background-image: url('/common/icon-back.png');
-}
-text {
-  position: relative;
-  color: white;
-}
-.dsf1 {
-  position: relative;
-  top: 170px;
+	position: absolute;
+	left: 0px;
+	top: 10px;
+	background-color: black;
+	color: white;
+	font-size: 80px;
+	font-weight: bold;
+	background-image: url("/common/icon-back.png");
 }
 </style>
