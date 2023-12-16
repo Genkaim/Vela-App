@@ -1,0 +1,33 @@
+{
+  "package": "com.genkaim.genshin",
+  "name": "手电筒",
+  "versionName": "1.0.0",
+  "versionCode": 1,
+  "minPlatformVersion": 400,
+  "icon": "/common/logo.png",
+  "simulationVersion": "default",
+  "deviceTypeList": [
+    "watch"
+  ],
+  "features": [
+    {
+      "name": "system.router"
+    },
+    { "name": "system.brightness" }
+  ],
+  "config": {
+    "logLevel": "log",
+    "designWidth": 480
+  },
+  "router": {
+    "entry": "pages/index",
+    "pages": {
+      "pages/index": {
+        "component": "index"
+      },
+      "pages/detail": {
+        "component": "detail"
+      }
+    }
+  }
+}

@@ -1,0 +1,49 @@
+<script>
+import brightness from '@system.brightness' 
+export default {
+  data: {
+    temp: 0
+  },
+  onCreate() {
+    brightness.setMode({
+      mode: 0,
+      success: function() {
+        console.log('handling success')
+      },
+      fail: function(data, code) {
+        console.log(`handling fail, code = ${code}`)
+      }
+    })
+    brightness.setValue({
+      value: 255,
+      success: function() {
+        console.log('handling success')
+      },
+      fail: function(data, code) {
+        console.log(`handling fail, code = ${code}`)
+      }
+    })
+    brightness.setKeepScreenOn({
+      keepScreenOn: true,
+      success: function() {
+        console.log('handling success')
+      },
+      fail: function(data, code) {
+        console.log(`handling fail, code = ${code}`)
+      }
+    })
+
+  },
+  onDestroy() {
+    brightness.setKeepScreenOn({
+      keepScreenOn: false,
+      success: function() {
+        console.log('handling success')
+      },
+      fail: function(data, code) {
+        console.log(`handling fail, code = ${code}`)
+      }
+    })
+  }
+}
+</script>

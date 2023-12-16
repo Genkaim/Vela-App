@@ -1,0 +1,38 @@
+<template>
+  <div class="page">
+    <swiper vertical="{{true}}" loop="{{false}}" class="swiper">
+      <image class="item item-1" src="img-0.png" />
+      <image class="item item-2" src="img-1.png" />
+    </swiper>
+  </div>
+</template>
+
+<script>
+  export default {
+    // 页面的数据对象，影响传入数据的覆盖机制：private内定义的属性不允许被覆盖
+  }
+</script>
+
+<style>
+  .page {
+    background-color: rgb(0, 0, 0);
+  }
+  .item-1 {
+    border-radius: 10px;
+  }
+  .swiper {
+    padding: 0px;
+    margin: 0px;
+    width: 100%;
+    height: 100%;
+    indicator-size: 20px;
+    indicator-left: 10px;
+    indicator-selected-color:rgb(106, 106, 106);
+    indicator-color:rgb(181, 181, 181);
+  }
+  .item {
+    text-align: center;
+    color: rgb(0, 0, 0);
+    font-size: 30px;
+  }
+</style>
