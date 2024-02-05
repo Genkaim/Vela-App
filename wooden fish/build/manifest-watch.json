@@ -9,14 +9,22 @@
     "watch"
   ],
   "features": [
-    { "name": "system.storage" },
-    { "name": "system.file" },
-    { "name": "system.prompt" },
-    { "name": "system.vibrator" }
+    {
+      "name": "system.storage"
+    },
+    {
+      "name": "system.file"
+    },
+    {
+      "name": "system.prompt"
+    },
+    {
+      "name": "system.vibrator"
+    }
   ],
   "config": {
     "logLevel": "log",
-    "designWidth": 600 
+    "designWidth": 600
   },
   "router": {
     "entry": "pages/index",

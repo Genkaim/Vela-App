@@ -9,14 +9,23 @@
     "watch"
   ],
   "features": [
-    { "name": "system.storage" },
-    { "name": "system.file" },
-    { "name": "system.prompt" },
-    { "name": "system.vibrator" }
+    {
+      "name": "system.storage"
+    },
+    {
+      "name": "system.file"
+    },
+    {
+      "name": "system.prompt"
+    },
+    {
+      "name": "system.vibrator"
+    }
   ],
   "config": {
     "logLevel": "log",
-    "designWidth": 600 
+    "designWidth": 600,
+    "debug": true
   },
   "router": {
     "entry": "pages/index",
@@ -34,5 +43,14 @@
         "component": "about"
       }
     }
+  },
+  "packageInfo": {
+    "originType": "cmd",
+    "toolkit": "1.0.18",
+    "timeStamp": "2024-02-03T05:12:28.882Z",
+    "node": "v18.18.0",
+    "platform": "linux",
+    "arch": "x64",
+    "component": false
   }
 }

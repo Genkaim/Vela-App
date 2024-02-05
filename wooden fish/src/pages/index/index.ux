@@ -1,12 +1,17 @@
 <template>
   <div class="page">
-      <img if="{{local_is_rp}}" class="muyu" src="muyu.png" onclick="nrpPlusPlus()" />
-      <img else class="muyu" src="muyu.png" onclick="rpPlusPlus()" />
+      <img if="{{SmallMuyu}}" class="muyu" src="muyu-s.png" />
+      <img else class="muyu" src="muyu.png" />
+      <div if="{{local_is_rp}}" class="control" onclick="nrpPlusPlus()"></div>
+      <div else class="control" onclick="rpPlusPlus()"></div>
       <text class="title">电子木鱼</text>
-      <text if="{{local_is_rp}}" class="cnt" >rp {{nlocalCnt}}</text>
+      <text if="{{local_is_rp}}" class="cnt" >RP {{nlocalCnt}}</text>
       <text else class="cnt" >功德 {{localCnt}}</text>
     <input class="settings" type="button" onclick="goToSettings()" />
-    <text if="{{plus && local_enable_ani}}" class="showPlus">{{str_mes}}</text>
+    <div class="showPlus" for="{{PlusList}}" tid="uniqueId">
+      <text style="font-weight: bold;">{{str_mes}}</text>
+    </div>
+    <!--<text if="{{plus && local_enable_ani}}" class="showPlus">{{str_mes}}</text>-->
   </div>
 </template>
 
@@ -22,6 +27,8 @@
 }
   export default {
     public: {
+      PlusList: [],
+      SmallMuyu: false,
       localCnt: 0,
       nlocalCnt: 0,
       plus: false,
@@ -30,13 +37,87 @@
       local_enable_vibrate: true,
       str_mes: '功德+1',
       str_vib: 'short',
-      list_mes: {false: '功德+1', true: 'rp++'},
+      list_mes: {false: '功德+1', true: 'RP++'},
       list_vib: {false: 'N', true: 'short'},
     },
     goToSettings(event) { 
         router.push({
           uri: '/pages/settings'
         })
+    },
+    Show() {
+      if(this.PlusList.length <= 3 && this.local_enable_ani) {
+          this.PlusList.push({
+            uniqueId: this.localCnt,
+          });
+          this.DeletePlus();
+        }
+    },
+    DeletePlus() {
+      setTimeout(() => {
+        if(this.PlusList.length > 0){
+          this.PlusList.splice(0, 1);
+        }
+      }, 300);
+    },
+    ChangeMuyu() {
+      if(this.local_enable_ani) {
+        this.SmallMuyu = true;
+        setTimeout(() => {
+          this.SmallMuyu = false;
+        }, 200);
+      }
+    },
+    rpPlusPlus(event) {
+      this.plus = true;
+      this.localCnt++;
+      this.Show();
+      this.ChangeMuyu();
+      this.$app.$def.data.rpCount = this.localCnt;
+      setTimeout(() => {
+          this.plus = false;
+      }, 400);
+      if (!this.local_enable_ani) {
+          prompt.showToast({
+              message: this.str_mes,
+              duration: 200
+          });      
+      }
+      this.Show();
+      this.ChangeMuyu();
+      this.$app.$def.data.rpCount = this.localCnt;
+      setTimeout(() => {
+          this.plus = false;
+      }, 400);
+      if (!this.local_enable_ani) {
+          prompt.showToast({
+              message: this.str_mes,
+              duration: 200
+          });
+      }
+      console.log("vibrated")
+      vibrator.vibrate({
+          mode: this.str_vib
+      });
+    },
+    nrpPlusPlus(event) {
+      this.plus = true;
+      this.nlocalCnt++;
+      this.Show();
+      this.ChangeMuyu();
+      this.$app.$def.data.nrpCount = this.nlocalCnt;
+      setTimeout(() => {
+          this.plus = false;
+      }, 400);
+      if (!this.local_enable_ani) {
+          prompt.showToast({
+              message: this.str_mes,
+              duration: 200
+          });
+      }
+      vibrator.vibrate({
+          mode: this.str_vib
+      });
     },
     onInit() {
       var self = this
@@ -82,7 +163,6 @@
         },
         fail: function() { }
       })
-      let imgElement = document.querySelector('.trans');
     },
     onShow() {
       this.localCnt = this.$app.$def.data.rpCount
@@ -92,46 +172,19 @@
       this.local_enable_ani = this.$app.$def.data.enable_ani
       this.str_mes = this.list_mes[this.local_is_rp]
       this.str_vib = this.list_vib[this.local_enable_vibrate]
-      let imgElement = document.querySelector('.trans');
     },
-    rpPlusPlus(event) {
-      this.plus = true;
-      this.localCnt++;
-      this.$app.$def.data.rpCount = this.localCnt;
-      setTimeout(() => {
-          this.plus = false;
-      }, 400);
-      if (!this.local_enable_ani) {
-          prompt.showToast({
-              message: this.str_mes,
-              duration: 200
-          });
-      }
-      vibrator.vibrate({
-          mode: this.str_vib
-      });
-    },
-    nrpPlusPlus(event) {
-      this.plus = true;
-      this.nlocalCnt++;
-      this.$app.$def.data.nrpCount = this.nlocalCnt;
-      setTimeout(() => {
-          this.plus = false;
-      }, 400);
-      if (!this.local_enable_ani) {
-          prompt.showToast({
-              message: this.str_mes,
-              duration: 200
-          });
-      }
-      vibrator.vibrate({
-          mode: this.str_vib
-      });
-    }
   }
 </script>
 
 <style>
+.control {
+    background-color: rgba(255, 255, 255, 0);
+    display: flex;
+    justify-content: center; /* 水平居中 */
+    top: 35px;
+    width: 450px;
+    height: 350px;/*350px */
+}
 .trans {
   position: absolute;
   right: -100%;  /* 初始时位于屏幕右侧外部 */
@@ -170,7 +223,6 @@
     width: 450px;
     height: 350px;/*350px */
   }
-
   .settings {
     position: absolute;
     background-color: rgba(47, 47, 47, 0.003);
@@ -183,12 +235,11 @@
   .showPlus {
     position: absolute;
     right: 70px;
-    top: 210px;
+    top: 220px;
     color: white;
-    font-weight: bold;
     animation-name: moveUp;
     animation-delay: 0s;
-    animation-duration: 200ms;
+    animation-duration: 300ms;
     animation-iteration-count: 1;
   }
   @keyframes moveUp {
@@ -196,7 +247,7 @@
       transform: translateY(0);
     }
     99% {
-      transform: translateY(-40px);
+      transform: translateY(-50px);
     }
     100% {
       visibility: hidden;

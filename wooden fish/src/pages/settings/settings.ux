@@ -1,23 +1,27 @@
 <template>
   <div class="page">
     <input class="back" type="button" value="" onclick="goBack" />
-    <div class="header" onclick="goAbout">
+    <div class="header">
       <text class="line1">电子木鱼</text>
-      <text class="line2">版本1.1.0</text>
+      <text class="line2">版本1.2.0</text>
       <image class="logo" src="/common/_logo.png" />
       <!-- <text class="about" onclick="goAbout">关于</text> -->
     </div>
     <div class="section">
-      <text class="title">开启震动....</text>
+      <text class="title">开启震动</text>
       <switch checked="{{$app.$def.data.enable_vibrate}}" class="switch" @change="changeVirate"></switch>
     </div>
     <div class="section">
-      <text class="title">使用动画....</text>
+      <text class="title">使用动画</text>
       <switch checked="{{$app.$def.data.enable_ani}}" class="switch" @change="changeAni"></switch>
     </div>
     <div class="section">
       <text class="title">信仰rp之神</text>
-      <switch checked="{{$app.$def.data.is_rp}}" class="switch" @change="changeRp"></switch>
+      <switch checked="{{$app.$def.data.is_rp}}" class="switch rp_switch" @change="changeRp"></switch>
+    </div>
+    <div class="section button-about" onclick="goAbout">
+			<div class="icon-about"></div>
+			<text class="title title-about">关于</text>
     </div>
     <input class="clear" type="button" value="删佛祖的库" onclick="toConfirm" />
   </div>
@@ -52,7 +56,7 @@
 
 <style>
 .header {
-  top: 150px;
+  top: 260px;
   height: 300px;
   width: 550px;
   display: flex;
@@ -113,6 +117,7 @@
   left: 70px ;
   top:40px;
 }
+
 .page {
   position: absolute;
   background-color: black;
@@ -126,39 +131,47 @@
   color: white;
   font-size: 50px;
   position: relative;
-  top: 170px;
+  top: 270px;
   margin-top: 20px;
+  margin-bottom: 20px;
   background-color: rgb(25, 25, 25);
   width:500px;
   height: 100px;
 }
 .switch {
-  left: 60px;
+  left: 90px;
   height: 100px;
   width: 150px;
-  margin-top: 20px;
-  margin-bottom: 10px;
-  margin-right: 50px;
+  margin-top: 15px;
+  margin-right: 20px;
+}
+.rp_switch {
+  left: 45px;
 }
 .section .title {
-  font-size: 55px;
+  font-size: 51px;
   position: relative;
   margin-right: 10px;
-  margin-left: 10px;
+  margin-left: 25px;
   margin-top: 10px;
   margin-bottom: 10px;
 }
+.title-about {
+  margin-left: 140px;
+}
 .section{
   position: relative;
-  top: 170px;
+  top: 270px;
+  width: 550px;
+  height: 170px;
   background-color: rgb(25, 25, 25);
   padding-left: 30px;
   padding-right: 30px;
   padding-top: 20px;
   padding-bottom: 20px;
-  border-radius: 40px;
+  border-radius: 60px;
   margin-left: 10px;
-  margin-top: 5px;
+  margin-top: 3px;
 }
   /*
   width: 380px ;
@@ -177,7 +190,16 @@
   justify-content: center;
   align-items: center;
 }*/
-
+.icon-about, .icon-help {
+	position: absolute;
+	left: -150px;
+	top: 18px;
+	height: 100%;
+	width: 100%;
+}
+.icon-about {
+	background-image: url("/common/icon-about.png");
+}
 .back {
   position: absolute;
   left: 0px;
@@ -194,6 +216,6 @@ text {
 }
 .dsf1 {
   position: relative;
-  top: 170px;
+  top: 280px;
 }
 </style>
