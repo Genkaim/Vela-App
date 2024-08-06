@@ -1,0 +1,52 @@
+<template>
+  <div class="page">
+    <image class="show" src="/common/detail.png"></image>
+    <input class="exit" type="button" onclick="exit()" />
+  </div>
+</template>
+
+<script>
+import router from '@system.router'
+export default {
+  private: {
+    text: '欢迎打开详情页'
+  },
+  exit(e){
+    router.back()
+  }
+}
+</script>
+
+<style>
+.show {
+  width: 192px;
+  height: 490px;
+}
+.bggg{
+    top: 160px;
+    width: 95%;
+    height: 130px;
+    background-color: #1b1b1b;
+    border-radius: 20px;
+}
+.page {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #000000;
+}
+
+.title {
+  font-size: 20px;
+  text-align: center;
+}
+.exit {
+    position: absolute;
+    background-color: rgba(47, 47, 47, 0.003);
+    bottom: 16px;
+    left: 71.5px;
+    height: 50px;
+    width: 50px;
+    background-image: url('/common/icon-back.png');
+  }
+</style>
