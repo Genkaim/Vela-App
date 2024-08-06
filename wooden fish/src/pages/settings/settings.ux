@@ -1,12 +1,23 @@
 <template>
   <div class="page">
-    <input class="back" type="button" value="" onclick="goBack" />
-    <div class="header">
-      <text class="line1">电子木鱼</text>
-      <text class="line2">版本1.2.0</text>
-      <image class="logo" src="/common/_logo.png" />
-      <!-- <text class="about" onclick="goAbout">关于</text> -->
-    </div>
+    <scroll id="scroll" scroll-y="true">
+      <image src="/common/dev.jpg" class="bg" if="{{!egg}}" onclick="show_egg()"></image>
+      <div class="center">
+        <image src="/common/set_1.1.png" if="{{!local_enable_vibrate}}" @click="changeVirate()" class="sections"></image>
+        <image src="/common/set_1.2.png" if="{{local_enable_vibrate}}" onclick="changeVirate()" class="sections"></image>
+        <image src="/common/set_2.1.png" if="{{!local_is_rp}}" @click="changeRp()" class="sections"></image>
+        <image src="/common/set_2.2.png" if="{{local_is_rp}}" onclick="changeRp()" class="sections"></image>
+        <image src="/common/set_3.1.png" if="{{!local_enable_ani}}" @click="changeAni()" class="sections"></image>
+        <image src="/common/set_3.2.png" if="{{local_enable_ani}}" onclick="changeAni()" class="sections"></image>
+        <image src="/common/set_5.1.png" @click="changeAuto()" class="sections"></image>
+        <image src="/common/set_4.png" class="sections" onclick="toConfirm()" ></image>
+        <image src="/common/black.png" class="sections black"></image>
+      </div>
+      <image src="/common/dev_egg.png" if="{{egg}}" onclick="hide_egg()" class="bg"></image>
+    </scroll>
+    <image src="/common/mask.png" class="mask"></image>
+    <input class="exit" type="button" onclick="exit()" />
+    <!--bs
     <div class="section">
       <text class="title">开启震动</text>
       <switch checked="{{$app.$def.data.enable_vibrate}}" class="switch" @change="changeVirate"></switch>
@@ -23,28 +34,62 @@
 			<div class="icon-about"></div>
 			<text class="title title-about">关于</text>
     </div>
-    <input class="clear" type="button" value="删佛祖的库" onclick="toConfirm" />
+    -->
+    <!--
+    <input class="clear" type="button" value="删佛祖的库" onclick="toConfirm" />-->
   </div>
 </template>
 <script>
   import router from '@system.router'
   export default {
+    public: {
+      local_enable_vibrate: false,
+      local_is_rp: false,
+      local_enable_ani:false,
+      local_auto:false,
+      egg:false
+    },
+    onShow() {
+      this.local_enable_vibrate = this.$app.$def.data.enable_vibrate;
+      this.local_is_rp = this.$app.$def.data.is_rp;
+      this.local_enable_ani = this.$app.$def.data.enable_ani;
+      global.runGC()
+    },
     goAbout(event){
       router.push({
           uri: '/pages/about'
         })
     },
-    goBack(event) {
+    exit(event) {
       router.back()
     },
+    show_egg(e) {
+      this.egg=true;
+    },
+    hide_egg(e) {
+      this.egg=false;
+    },
     changeVirate(e) {
-      this.$app.$def.data.enable_vibrate = e.checked;
+      this.local_enable_vibrate = !this.local_enable_vibrate ;
+      this.$app.$def.data.enable_vibrate = this.local_enable_vibrate ;
     },
     changeRp(e) {
-      this.$app.$def.data.is_rp = e.checked;
+      this.local_is_rp = !this.local_is_rp ;
+      this.$app.$def.data.is_rp = this.local_is_rp ;
     },
     changeAni(e) {
-      this.$app.$def.data.enable_ani = e.checked;
+      this.local_enable_ani = !this.local_enable_ani ;
+      this.$app.$def.data.enable_ani = this.local_enable_ani ;
+    },    
+    changeAuto(e) {
+      this.local_auto = !this.local_auto;
+      this.$app.$def.data.auto = this.local_auto ;      
+        router.push({
+          uri: '/pages/index',
+          params: {
+              testId: '1'
+          }
+        })
     },
     toConfirm(event) {
       router.push({
@@ -55,68 +100,52 @@
 </script>
 
 <style>
-.header {
-  top: 260px;
-  height: 300px;
-  width: 550px;
-  display: flex;
-  background-color: rgba(25, 25, 25, 0.7);
-  border-radius: 40px;
-  /*
-  animation-name: bc;
-    animation-delay: 0s;
-    animation-duration: 10000ms;
-    animation-iteration-count: infinite;*/
+.black {
+  width: 192px;
+  height: 100px;
 }
-@keyframes bc {
-    0% {
-      opacity: 1
-    }
-    50% {
-      opacity: 0.5
-    }
-    100% {
-      opacity: 1
-    }
+.mask {
+  object-fit: contain;
+  position: absolute;
+  bottom: 0px;
+  width: 192px;
+}
+#scroll {
+  width: 192px;  
+  height: 490px;
+}
+  .exit {
+    position: absolute;
+    background-color: rgba(47, 47, 47, 0.003);
+    bottom: 16px;
+    left: 71.5px;
+    height: 50px;
+    width: 50px;
+    background-image: url('/common/icon-back.png');
   }
 
-.about {
-  font-size: 30px;
-  position: relative;
-  padding-left: 20px;
-  right: -10px;
-  width: 100px;
-  top: 200px;
-  font-weight: bold;
-  color: white;
-  position: relative;
-  background-color: rgb(78, 78, 78);
-  border-radius: 35px;
-  height: 174px;
+.bg {
+  position: absolute;
+  object-fit: contain;
+  width: 192px;
+  height: 490px;
 }
-.logo {
-  margin: 0px;
-  position: relative;
-  top: 60px;
-  left: -300px;
+.center {
+  justify-content: center; /* 水平居中 */
+  position: absolute;
+  top: 300px;
+  display: flex;
+  flex-direction: column;
+  display: flex;
 }
-.line1 {
-  position: relative;
-  font-size:55px;
-  font-weight: bold;
-  left: 280px;
-  top: -30px;
-  margin: 0px;
+.sections {
+  object-fit: contain;
+  width: 180px;
+  margin-top: 2px;
+  margin-bottom: 0px;
+  margin-left: 7px;
 }
-.line2 {
-  color: rgb(194, 194, 194);
-  font-size: 50px;
-  font-weight: bold;
-  position: relative;
-  font-size: 30px;
-  left: 70px ;
-  top:40px;
-}
+
 
 .page {
   position: absolute;
@@ -127,95 +156,8 @@
   justify-content: center; /* 水平居中 */
   align-items: center; /* 垂直居中 */
 }
-.clear {
-  color: white;
-  font-size: 50px;
-  position: relative;
-  top: 270px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  background-color: rgb(25, 25, 25);
-  width:500px;
-  height: 100px;
-}
-.switch {
-  left: 90px;
-  height: 100px;
-  width: 150px;
-  margin-top: 15px;
-  margin-right: 20px;
-}
-.rp_switch {
-  left: 45px;
-}
-.section .title {
-  font-size: 51px;
-  position: relative;
-  margin-right: 10px;
-  margin-left: 25px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-.title-about {
-  margin-left: 140px;
-}
-.section{
-  position: relative;
-  top: 270px;
-  width: 550px;
-  height: 170px;
-  background-color: rgb(25, 25, 25);
-  padding-left: 30px;
-  padding-right: 30px;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  border-radius: 60px;
-  margin-left: 10px;
-  margin-top: 3px;
-}
-  /*
-  width: 380px ;
-  height: 100px ;
-  font-size: 60px;
-  top: 50px;
-  border-radius: 20px;
-  padding-left: 30px;
-  padding-right: 30px;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  margin-left: auto;
-  margin-right: auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}*/
-.icon-about, .icon-help {
-	position: absolute;
-	left: -150px;
-	top: 18px;
-	height: 100%;
-	width: 100%;
-}
-.icon-about {
-	background-image: url("/common/icon-about.png");
-}
-.back {
-  position: absolute;
-  left: 0px;
-  top: 10px;
-  background-color: black;
-  color: white;
-  font-size: 80px;
-  font-weight: bold;
-  background-image: url('/common/icon-back.png');
-}
 text {
   position: relative;
   color: white;
-}
-.dsf1 {
-  position: relative;
-  top: 280px;
 }
 </style>

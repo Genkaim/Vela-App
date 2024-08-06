@@ -1,16 +1,23 @@
 <template>
   <div class="page">
-      <img if="{{SmallMuyu}}" class="muyu" src="muyu-s.png" />
-      <img else class="muyu" src="muyu.png" />
+      <div class="showPlus"  for="{{PlusList}}" tid="uniqueId">
+        <div if="{{ani}}" class="showPlusAni" ></div><div if="{{!ani}}" class="showPlusAni_2" ></div>
+        <image if="{{local_is_rp}}" class="showPlusCover" src="/common/rp.png"></image>
+        <image else class="showPlusCover" src="/common/gd.png"></image>
+      </div>
+      <image if="{{muyu == 0}}" class="muyu" src="muyu0.png" />
+      <image if="{{muyu == 1}}" class="muyu" src="muyu1.png" />
+      <image if="{{muyu == 2}}" class="muyu" src="muyu2.png" />
+      <image if="{{muyu == 3}}" class="muyu" src="muyu3.png" />
+      <image if="{{muyu == 4}}" class="muyu" src="muyu4.png" />
       <div if="{{local_is_rp}}" class="control" onclick="nrpPlusPlus()"></div>
       <div else class="control" onclick="rpPlusPlus()"></div>
-      <text class="title">电子木鱼</text>
       <text if="{{local_is_rp}}" class="cnt" >RP {{nlocalCnt}}</text>
       <text else class="cnt" >功德 {{localCnt}}</text>
-    <input class="settings" type="button" onclick="goToSettings()" />
-    <div class="showPlus" for="{{PlusList}}" tid="uniqueId">
-      <text style="font-weight: bold;">{{str_mes}}</text>
-    </div>
+      <input class="exit" type="button" onclick="exit()" />
+      <input class="setting" type="button" onclick="to_setting()" />
+      <image if="{{local_auto}}" class="auto_cover" src="/common/auto_cover.png"></image>
+      <image if="{{local_auto}}" class="exit_auto" src="/common/exit.png" @click="exit_auto()">退出自动模式</image>
     <!--<text if="{{plus && local_enable_ani}}" class="showPlus">{{str_mes}}</text>-->
   </div>
 </template>
@@ -25,107 +32,127 @@
     if (str.toLowerCase() === "false") return false;
     throw new Error("Invalid string value for boolean conversion");
 }
+  let break_flag=true;
   export default {
     public: {
       PlusList: [],
-      SmallMuyu: false,
+      auto:false,
+      ani: true,
+      muyu: 0,
       localCnt: 0,
       nlocalCnt: 0,
       plus: false,
       local_is_rp: false,
       local_enable_ani: false,
-      local_enable_vibrate: true,
+      local_enable_vibrate: false,
+      local_auto:false,
       str_mes: '功德+1',
       str_vib: 'short',
       list_mes: {false: '功德+1', true: 'RP++'},
       list_vib: {false: 'N', true: 'short'},
     },
-    goToSettings(event) { 
-        router.push({
-          uri: '/pages/settings'
-        })
+    exit(event) { 
+      this.$app.exit()
+    },
+    to_setting(event) { 
+      router.push({
+          uri: '/pages/settings',
+          params: {
+              testId: '1'
+          }
+          })
     },
     Show() {
-      if(this.PlusList.length <= 3 && this.local_enable_ani) {
+      let temp=this.PlusList.length;
+      if(temp== 0 && this.local_enable_ani) {
           this.PlusList.push({
-            uniqueId: this.localCnt,
+            uniqueId: temp,
           });
           this.DeletePlus();
+          this.ChangeAni();
         }
+    },
+    ChangeAni() {
+      this.ani = true;
+      setTimeout(() => {
+        this.ani = false;
+      }, 220);
     },
     DeletePlus() {
       setTimeout(() => {
         if(this.PlusList.length > 0){
           this.PlusList.splice(0, 1);
         }
-      }, 300);
+      }, 400);
     },
     ChangeMuyu() {
       if(this.local_enable_ani) {
-        this.SmallMuyu = true;
+        this.muyu = 0;
         setTimeout(() => {
-          this.SmallMuyu = false;
-        }, 200);
+          this.muyu = 1;
+          setTimeout(() => {
+            this.muyu = 2;
+            setTimeout(() => {
+              this.muyu = 3;
+              setTimeout(() => {
+                this.muyu = 4;
+                this.BackMuyu();
+              }, 30);
+            }, 30);
+          }, 30);
+        }, 30);
       }
     },
-    rpPlusPlus(event) {
-      this.plus = true;
-      this.localCnt++;
-      this.Show();
-      this.ChangeMuyu();
-      this.$app.$def.data.rpCount = this.localCnt;
+    BackMuyu(){
       setTimeout(() => {
-          this.plus = false;
-      }, 400);
+          this.muyu = 3;
+          setTimeout(() => {
+            this.muyu = 2;
+            setTimeout(() => {
+              this.muyu = 1;
+              setTimeout(() => {
+                this.muyu = 0;
+              }, 30);
+            }, 30);
+          }, 30);
+        }, 30);
+    },
+    normal_ani() {
+      this.ChangeMuyu();
+      this.Show();
       if (!this.local_enable_ani) {
           prompt.showToast({
               message: this.str_mes,
               duration: 200
           });      
       }
-      this.Show();
-      this.ChangeMuyu();
-      this.$app.$def.data.rpCount = this.localCnt;
-      setTimeout(() => {
-          this.plus = false;
-      }, 400);
-      if (!this.local_enable_ani) {
-          prompt.showToast({
-              message: this.str_mes,
-              duration: 200
-          });
-      }
-      console.log("vibrated")
-      vibrator.vibrate({
+      if(this.local_enable_vibrate){
+        vibrator.vibrate({
           mode: this.str_vib
       });
+      }
+    },
+    rpPlusPlus(event) {
+        this.localCnt++;
+        this.$app.$def.data.rpCount = this.localCnt;
+        this.normal_ani();
     },
     nrpPlusPlus(event) {
-      this.plus = true;
-      this.nlocalCnt++;
-      this.Show();
-      this.ChangeMuyu();
-      this.$app.$def.data.nrpCount = this.nlocalCnt;
-      setTimeout(() => {
-          this.plus = false;
-      }, 400);
-      if (!this.local_enable_ani) {
-          prompt.showToast({
-              message: this.str_mes,
-              duration: 200
-          });
-      }
-      vibrator.vibrate({
-          mode: this.str_vib
-      });
+        this.nlocalCnt++;
+        this.$app.$def.data.nrpCount = this.nlocalCnt;
+        this.normal_ani();
     },
-    onInit() {
-      var self = this
+    update_data(){
       this.localCnt = this.$app.$def.data.rpCount
       this.nlocalCnt = this.$app.$def.data.nrpCount
       this.local_is_rp = this.$app.$def.data.is_rp
       this.local_enable_vibrate = this.$app.$def.data.enable_vibrate
       this.local_enable_ani = this.$app.$def.data.enable_ani
+      this.local_auto = this.$app.$def.data.auto
+    },
+    onInit() {
+      var self = this
+      this.update_data();
       storage.get({
         key: 'genkaim_muyu_cnt',
         success: function(e) {
@@ -164,40 +191,137 @@
         fail: function() { }
       })
     },
+    exit_auto() {
+      break_flag = true;
+      setTimeout(() => {
+        this.$app.$def.data.auto = false;
+        this.local_auto = false;
+      }, 700);
+    },
+    RunAuto(){
+      setTimeout(() => {
+        if(this.local_is_rp) {
+          this.nrpPlusPlus();
+        }
+        else{
+          this.rpPlusPlus();
+        }
+        if(!break_flag){
+          this.RunAuto()
+        }
+      }, 700);
+    },
     onShow() {
-      this.localCnt = this.$app.$def.data.rpCount
-      this.nlocalCnt = this.$app.$def.data.nrpCount
-      this.local_is_rp = this.$app.$def.data.is_rp
-      this.local_enable_vibrate = this.$app.$def.data.enable_vibrate
-      this.local_enable_ani = this.$app.$def.data.enable_ani
+      global.runGC()
+      this.update_data();
       this.str_mes = this.list_mes[this.local_is_rp]
       this.str_vib = this.list_vib[this.local_enable_vibrate]
-    },
+      if(this.local_auto){
+        this.RunAuto();
+        break_flag = false
+      }
+    }
   }
 </script>
 
 <style>
+.muyu {
+  position: absolute;
+  object-fit: contain;
+  width:180px;
+  top: 140px;
+}
+.auto_cover {
+    position: absolute;
+    width: 100%;
+    width: 100%;
+    object-fit: contain;
+  }
+  .exit_auto{
+    position: absolute;
+    object-fit: contain;
+    top: 315px;
+    color: white;
+    font-size:  40px;
+    width: 130px;
+  }
+  .showPlus {
+    position: absolute;
+    right: 20px;
+    top: 90px;
+    color: white;
+    font-size:  30px;
+  }
+  
+  .showPlusCover {
+    object-fit: contain;
+    width: 80px;
+    left:-3px;
+    animation-name: moveUp;
+    animation-delay: 0s;
+    animation-duration: 400ms;
+    animation-iteration-count: 1;
+  }
+  .showPlusAni {
+    left:75px;
+    width:75px;
+    height:100px;
+    background-color:white;
+    animation-name: opa;
+    animation-delay: 0s;
+    animation-duration: 220ms;
+    animation-iteration-count: 1;
+  }
+  .showPlusAni_2 {
+    left:75px;
+    width:75px;
+    height:100px;
+    background-color:white;
+    animation-name: opa_2;
+    animation-delay: 0s;
+    animation-duration: 180ms;
+    animation-iteration-count: 1;
+  }
+  @keyframes moveUp {
+    0% {
+      transform: translateY(-10px);
+    }
+
+    100% {
+      transform: translateY(-35px);
+    }
+  }
+  @keyframes opa {
+    0% {
+      background-color: black;
+    }
+    100% {
+      background-color: white;
+    }
+  }
+  @keyframes opa_2 {
+    0% {
+      background-color: white;
+    }
+    100% {
+      background-color: black;
+    }
+  }
 .control {
     background-color: rgba(255, 255, 255, 0);
     display: flex;
     justify-content: center; /* 水平居中 */
-    top: 35px;
-    width: 450px;
-    height: 350px;/*350px */
-}
-.trans {
-  position: absolute;
-  right: -100%;  /* 初始时位于屏幕右侧外部 */
-  transition: right 1s ease-in-out;  /* 过渡效果 */
+    top: 15px;
+    width: 192px;
+    height: 150px;
 }
   .page {
     background-color: black;
     display: flex;
     flex-direction: column;
     display: flex;
-    justify-content: center; /* 水平居中 */
-    align-items: center; /* 垂直居中 */
-    height: 100%; /* 确保容器占满整个视窗 */
+    justify-content: center; 
+    align-items: center; 
   }
   .title, .cnt {
     position: absolute;
@@ -205,53 +329,28 @@
     display: flex;
     justify-content: center; /* 水平居中 */
   }
-  .title {
-    font-weight: bold;
-    top: 30px;
-    font-size: 50px;
-  }
+  
   .cnt {
-    font-size: 70px;
-    bottom: 100px;
+    font-size: 28px;
+    bottom:155px;
   }
-  .muyu {
-    position: absolute;
-    background-color: transparent;
-    display: flex;
-    justify-content: center; /* 水平居中 */
-    top: 250px;
-    width: 450px;
-    height: 350px;/*350px */
-  }
-  .settings {
+  .exit {
     position: absolute;
     background-color: rgba(47, 47, 47, 0.003);
-    top: 10px;
-    right: 10px;
-    height: 100px;
-    width: 100px;
-    background-image: url('/common/icon-settings.png');
+    bottom: 16px;
+    left: 71.5px;
+    height: 50px;
+    width: 50px;
+    background-image: url('/common/icon-back.png');
   }
-  .showPlus {
+  .setting{
     position: absolute;
-    right: 70px;
-    top: 220px;
-    color: white;
-    animation-name: moveUp;
-    animation-delay: 0s;
-    animation-duration: 300ms;
-    animation-iteration-count: 1;
-  }
-  @keyframes moveUp {
-    0% {
-      transform: translateY(0);
-    }
-    99% {
-      transform: translateY(-50px);
-    }
-    100% {
-      visibility: hidden;
-    }
+    background-color: rgba(47, 47, 47, 0.003);
+    top: 16px;
+    left: 71.5px;
+    height: 50px;
+    width: 50px;
+    background-image: url('/common/icon-settings.png');
   }
 
 </style>

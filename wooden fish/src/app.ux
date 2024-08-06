@@ -10,8 +10,9 @@ export default {
     rpCount: 0,
     nrpCount: 0,
     is_rp: false,
-    enable_vibrate: true,
-    enable_ani: false
+    enable_vibrate: false,
+    enable_ani: false,
+    auto: false,
   },
   // 监听应用创建,应用创建时调用
   onCreate() { 
@@ -23,6 +24,7 @@ export default {
       },
       fail: function() { }
     })
+    
     storage.get({
       key: 'genkaim_muyu_ncnt',
       success: function(e) {
@@ -64,7 +66,7 @@ export default {
             console.log(`handling fail, code = ${code}`);
           }
         });
-    storage.set({
+        storage.set({
           key: 'genkaim_muyu_ncnt',
           value: String(this.data.nrpCount),
           success: function() {

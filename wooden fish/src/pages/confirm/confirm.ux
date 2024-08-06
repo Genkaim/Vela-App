@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <!-- <input class="back" type="button" onclick="goBack" /> -->
-    <text class="title">确定要清除所有功德吗</text>
+    <text class="title">确定要清除所有功德?</text>
     <input class="yes" type="button" value="确认" onclick="clearData" />
     <input class="no" type="button" value="取消" onclick="goBack" />
   </div>
@@ -24,12 +24,12 @@
 
 <style>
 .yes, .no {
-  width: 500px;
-  height: 150px;
+  width: 150px;
+  height: 80px;
   color: white;
-  font-size: 40px;
+  font-size: 25px;
   font-weight: bold;
-  margin-top: 60px;
+  margin-top: 4px;
 }
 .page {
   position: absolute;
@@ -51,16 +51,20 @@
   background-image: url('/common/icon-back.png');
 }
 .yes {
-  margin-top: 50px;
+  margin-top: 10px;
   background-color: rgb(44, 44, 44);
 }
 .no {
-  margin-top: 30px;
+  margin-top: 5px;
+}
+.no, .yes {
+  font-size: 20px;
 }
 .title {
   color: white;
-  font-size: 50px;
+  font-size: 30px;
   font-weight: bold;
   top: 5px;
+  padding:25px;
 }
 </style>
