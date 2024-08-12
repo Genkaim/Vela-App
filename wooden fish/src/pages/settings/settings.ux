@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <scroll id="scroll" scroll-y="true">
-      <image src="/common/dev.jpg" class="bg" if="{{!egg}}" onclick="show_egg()"></image>
+      <image src="/common/dev.png" class="bg" if="{{!egg}}" onclick="show_egg()"></image>
       <div class="center">
         <image src="/common/set_1.1.png" if="{{!local_enable_vibrate}}" @click="changeVirate()" class="sections"></image>
         <image src="/common/set_1.2.png" if="{{local_enable_vibrate}}" onclick="changeVirate()" class="sections"></image>
@@ -57,11 +57,20 @@
     },
     goAbout(event){
       router.push({
-          uri: '/pages/about'
+          uri: '/pages/about',
+          params: {
+        ___PARAM_LAUNCH_FLAG___: 'clearTask'
+      }
         })
     },
     exit(event) {
-      router.back()
+      router.push({
+          uri: '/pages/index',
+          params: {
+        ___PARAM_LAUNCH_FLAG___: 'clearTask',
+            is_in: 'true'
+          }
+      })
     },
     show_egg(e) {
       this.egg=true;
@@ -87,13 +96,17 @@
         router.push({
           uri: '/pages/index',
           params: {
-              testId: '1'
+            ___PARAM_LAUNCH_FLAG___: 'clearTask',
+            is_in: 'true'
           }
         })
     },
     toConfirm(event) {
       router.push({
-            uri: '/pages/confirm'
+            uri: '/pages/confirm',
+            params: {
+            ___PARAM_LAUNCH_FLAG___: 'clearTask',
+          }
           })
     }
   }

@@ -1,0 +1,36 @@
+<template>
+  <div class="page">
+  </div>
+</template>
+
+<script>
+  import router from '@system.router'
+  import prompt from '@system.prompt'  //弹窗模块
+  export default {
+    onShow() {
+        router.push({
+          uri: '/pages/index',
+          params: {
+            ___PARAM_LAUNCH_FLAG___: 'clearTask'
+          }
+          })
+    }
+  }
+</script>
+
+<style>
+.img {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+}
+.page {
+  position: absolute;
+  background-color: black;
+  display: flex;
+  flex-direction: column;
+  display: flex;
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 */
+}
+</style>

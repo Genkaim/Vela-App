@@ -1,8 +1,8 @@
 {
   "package": "com.genkaim.muyu.mi9",
   "name": "电子木鱼",
-  "versionName": "1.3.1",
-  "versionCode": 10,
+  "versionName": "1.3.8",
+  "versionCode": 17,
   "minPlatformVersion": 1000,
   "icon": "/common/logo.png",
   "deviceTypeList": [
@@ -10,16 +10,16 @@
   ],
   "features": [
     { "name": "system.storage" },
-    { "name": "system.file" },
     { "name": "system.prompt" },
-    { "name": "system.vibrator" }
+    { "name": "system.vibrator" },
+    { "name": "system.brightness" }
   ],
   "config": {
     "logLevel": "log",
     "designWidth": 192 
   },
   "router": {
-    "entry": "pages/index",
+    "entry": "pages/mid",
     "pages": {
       "pages/index": {
         "component": "index"
@@ -32,6 +32,9 @@
       },
       "pages/about": {
         "component": "about"
+      },
+      "pages/mid": {
+        "component": "mid"
       }
     }
   }

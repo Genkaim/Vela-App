@@ -1,3 +1,4 @@
+
 <template>
   <div class="page">
     <!-- <input class="back" type="button" onclick="goBack" /> -->
@@ -12,12 +13,22 @@
   import prompt from '@system.prompt'  //弹窗模块
   export default {
     goBack(event) {
-      router.back()
+      router.push({
+          uri: '/pages/settings',
+          params: {
+            ___PARAM_LAUNCH_FLAG___: 'clearTask'
+          }
+          })
     },
     clearData(event) {
       this.$app.$def.data.rpCount = 0;
       this.$app.$def.data.nrpCount = 0;
-      router.back()
+      router.push({
+          uri: '/pages/settings',
+          params: {
+            ___PARAM_LAUNCH_FLAG___: 'clearTask'
+          }
+          })
     }
   }
 </script>
