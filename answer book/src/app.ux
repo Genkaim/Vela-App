@@ -1,10 +1,44 @@
 <script>
+import storage from '@system.storage'
+function stringToBool(str) {
+    if (str.toLowerCase() === "true") return true;
+    if (str.toLowerCase() === "false") return false;
+    throw new Error("Invalid string value for boolean conversion");
+}
 export default {
   onCreate() {
-    console.log('app created')
+    var self = this;
+    storage.get({
+      key: 'enable_sci',
+      success: function(e) {
+        e && (self.data.settings[0]['value'] =  stringToBool(e))
+      },
+      fail: function() { }
+    })
   },
   onDestroy() {
-    console.log('app destroyed')
-  }
+    var self = this;
+    storage.set({
+          key: 'enable_sci',
+          value: String(self.data.settings[0]['value']),
+          success: function() {
+            console.log('Data saved successfully');
+          },
+          fail: function(data, code) {
+            console.log(`handling fail, code = ${code}`);
+          }
+      });
+  },  
+  data: {
+    router_animation_duration: 350,
+    settings: [
+			{
+				'text': "实验性功能",
+				'value': false,
+				'index': "sci",
+				'type': 'bool'
+			},
+		],
+  },
 }
 </script>
