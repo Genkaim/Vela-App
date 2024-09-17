@@ -1,0 +1,1610 @@
+<template>
+  <div class="page" @swipe="_blank()">
+    <scroll id="scroll" scroll-y="true" bounces="true" bounces="true" scroll-top="0px">
+      <swiper id="swiper"  @change="swipered()" loop="true" duration="100"
+        enableswipe="{{enable_swipe}}">
+        <div for="{{array_2}}" class="cow cow_1">
+          <div class="element" style="background-color:{{type_to_background_color[get_data($item.index, 'type')]}}"
+            onclick="touched({{$item.index}})" for="{{local_data[$item.id]}}">
+            <div class="group">
+              <text class="line" style="">{{ get_data($item.index, "index") }}</text>
+              <text class="line" style="position: absolute; right: 5px">{{ $item.name }}</text>
+            </div>
+            <div class="group">
+              <text class="line" style="font-size: 30px; margin-left: 3px">{{ $item.weight }}</text>
+              <text class="line" style="font-size: 30px; margin-left: 10px; position: absolute; right: 5px">
+                {{ $item.chinese_name }}
+              </text>
+            </div>
+            <text class="line" if="{{mode == 'normal'}}" style="margin-top: 10px; font-size: 25px; margin-left: 5px">
+              {{ $item.arrange }}
+            </text>
+            <text class="line" if="{{mode == 'elec'}}" style="margin-top: 10px; font-size: 30px; margin-left: 5px">
+              {{ get_data($item.index, "elec") }}
+            </text>
+          </div>
+        </div>
+      </swiper>
+      <div class="left_index">
+        <text @click="to({{$item.id}})" style="color: white; font-size: 20px; margin-bottom: 129px; margin-left: 5px"
+          for="{{array}}">
+          {{ $item.id + 1 }}
+        </text>
+      </div>
+    </scroll>
+
+    <image src="/common/mask.png" class="mask"></image>
+    <input class="exit" type="button" onclick="exit()" />
+    <div class="menu" if="{{menuing}}">
+      <scroll id="scroll" scroll-y="true" bounces="true" bounces="true" scroll-top="0px">
+        <div class="button_group" style="left: 3px; top: 67px">
+          <div class="sec" for="{{array_3}}" style="
+              width: 160px;
+              height: 65px;
+              background-color: #212421;
+              border-radius: 20px;
+              margin-top: 3px;
+              padding: 4px;
+            ">
+            <text class="line" onclick="to({{$item.id1}})" style="
+                margin: 2px;
+                background-color: #343834;
+                padding: 4px;
+                padding-top: 16px;
+                padding-bottom: 14px;
+                border-radius: 15px;
+                width: 70px;
+                height: 62px;
+                font-size: 17px;
+                text-align: center;
+              ">
+              {{ get_data($item.id1, "head") }}
+            </text>
+            <text class="line" onclick="to({{$item.id2}})" style="
+                margin: 2px;
+                background-color: #343834;
+                padding: 4px;
+                padding-top: 16px;
+                padding-bottom: 14px;
+                border-radius: 15px;
+                width: 70px;
+                height: 62px;
+                font-size: 17px;
+                text-align: center;
+              ">
+              {{ get_data($item.id2, "head") }}
+            </text>
+            <text class="line" onclick="to({{$item.id3}})" style="
+                margin: 2px;
+                background-color: #343834;
+                padding: 4px;
+                padding-top: 16px;
+                padding-bottom: 14px;
+                border-radius: 15px;
+                width: 70px;
+                height: 62px;
+                font-size: 17px;
+                text-align: center;
+              ">
+              {{ get_data($item.id3, "head") }}
+            </text>
+          </div>
+        </div>
+        <div class="setting_item" style="border: 3px solid {{ec[mode]}};" @click="change_setting()">
+          <text class="line" style="text-align: center; font-size: 25px">电负性</text>
+        </div>
+        <div class="setting_item" style="top:569px;border: 3px solid {{ec['normal']}};" @click="to_setting()">
+          <text class="line" style="text-align: center; font-size: 25px; padding-left: 5px">
+            设置
+          </text>
+        </div>
+        <text style="position: absolute;right: 5px;top: 620px;width: 160px; height: 62px; font-size: 15px; text-align: center; color: white">
+          By Genkaim
+        </text>
+      </scroll>
+      <image src="/common/mask.png" class="mask"></image>
+    </div>
+
+    <text class="head" @click="head_touched" if="{{!menuing}}">{{ "∷ " + head }}</text>
+    <text class="head" @click="head_touched" if="{{menuing}}">{{ "∷ " + head }}</text>
+    <div class="page" style="
+        position: absolute;
+        right: 0px;
+        bottom: 00px;
+        width: 90%;
+        height: 90%;
+        display:{{to_b[loading]}};
+        background-color: rgba(0, 0, 0, 0.419);
+      ">
+      <text class="line"></text>
+    </div>
+
+    <div if="{{kaiping}}" class="page" style="position: absolute; width: 100%; height: 100%; background-color: black">
+      <image style="object-fit: contain; width: 172px" src="/common/_logo.png"></image>
+    </div>
+  </div>
+</template>
+
+<script>
+const js_data = [
+  [
+    {
+      name: "H",
+      index: "1",
+      arrange: "1s^1",
+      chinese_name: "氢",
+      weight: 1.008
+    },
+    {
+      name: "Li",
+      index: "3",
+      arrange: "2s^1",
+      chinese_name: "锂",
+      weight: 6.941
+    },
+    {
+      name: "Na",
+      index: "11",
+      arrange: "3s^1",
+      chinese_name: "钠",
+      weight: 22.99
+    },
+    {
+      name: "K",
+      index: "19",
+      arrange: "4s^1",
+      chinese_name: "钾",
+      weight: 39.1
+    },
+    {
+      name: "Rb",
+      index: "37",
+      arrange: "5s^1",
+      chinese_name: "铷",
+      weight: 85.47
+    },
+    {
+      name: "Cs",
+      index: "55",
+      arrange: "6s^1",
+      chinese_name: "铯",
+      weight: 132.9
+    },
+    {
+      name: "Fr",
+      index: "87",
+      arrange: "7s^1",
+      chinese_name: "钫",
+      weight: "(223)"
+    }
+  ],
+  [
+    {
+      name: " ",
+      index: " ",
+      arrange: " ",
+      chinese_name: " ",
+      weight: " "
+    },
+    {
+      name: "Be",
+      index: "4",
+      arrange: "2s^2",
+      chinese_name: "铍",
+      weight: 9.012
+    },
+    {
+      name: "Mg",
+      index: "12",
+      arrange: "3s^2",
+      chinese_name: "镁",
+      weight: 24.31
+    },
+    {
+      name: "Ca",
+      index: "20",
+      arrange: "4s^2",
+      chinese_name: "钙",
+      weight: 40.08
+    },
+    {
+      name: "Sr",
+      index: "38",
+      arrange: "5s^2",
+      chinese_name: "锶",
+      weight: 87.62
+    },
+    {
+      name: "Ba",
+      index: "56",
+      arrange: "6s^2",
+      chinese_name: "钡",
+      weight: 137.3
+    },
+    {
+      name: "Ra",
+      index: "88",
+      arrange: "7s^2",
+      chinese_name: "镭",
+      weight: "(226)"
+    }
+  ],
+  [
+    {
+      name: " ",
+      index: " ",
+      arrange: " ",
+      chinese_name: " ",
+      weight: " "
+    },
+    {
+      name: " ",
+      index: " ",
+      arrange: " ",
+      chinese_name: " ",
+      weight: " "
+    },
+    {
+      name: " ",
+      index: " ",
+      arrange: " ",
+      chinese_name: " ",
+      weight: " "
+    },
+    {
+      name: "Sc",
+      index: "21",
+      arrange: "4s^2 3d^1",
+      chinese_name: "钪",
+      weight: 44.96
+    },
+    {
+      name: "Y",
+      index: "39",
+      arrange: "5s^2 4d^1",
+      chinese_name: "钇",
+      weight: 88.91
+    },
+    {
+      name: "",
+      index: "La-Lu",
+      arrange: "57-71",
+      chinese_name: "",
+      weight: "镧系"
+    },
+    {
+      name: "",
+      index: "Ac-Lr",
+      arrange: "89-103",
+      chinese_name: "",
+      weight: "锕系"
+    }
+  ],
+  [
+    {
+      name: " ",
+      index: " ",
+      arrange: " ",
+      chinese_name: " ",
+      weight: " "
+    },
+    {
+      name: " ",
+      index: " ",
+      arrange: " ",
+      chinese_name: " ",
+      weight: " "
+    },
+    {
+      name: " ",
+      index: " ",
+      arrange: " ",
+      chinese_name: " ",
+      weight: " "
+    },
+    {
+      name: "Ti",
+      index: "22",
+      arrange: "4s^2 3d^2",
+      chinese_name: "钛",
+      weight: 47.87
+    },
+    {
+      name: "Zr",
+      index: "40",
+      arrange: "5s^2 4d^2",
+      chinese_name: "锆",
+      weight: 91.22
+    },
+    {
+      name: "Hf",
+      index: "72",
+      arrange: "6s^2 4f^14 5d^2",
+      chinese_name: "铪",
+      weight: 178.5
+    },
+    {
+      name: "Rf",
+      index: "104",
+      arrange: "7s^2 5f^14 6d^2",
+      chinese_name: "𬬻*",
+      weight: "(265)"
+    }
+  ],
+  [
+    {
+      name: " ",
+      index: " ",
+      arrange: " ",
+      chinese_name: " ",
+      weight: " "
+    },
+    {
+      name: " ",
+      index: " ",
+      arrange: " ",
+      chinese_name: " ",
+      weight: " "
+    },
+    {
+      name: " ",
+      index: " ",
+      arrange: " ",
+      chinese_name: " ",
+      weight: " "
+    },
+    {
+      name: "V",
+      index: "23",
+      arrange: "4s^2 3d^3",
+      chinese_name: "钒",
+      weight: 50.94
+    },
+    {
+      name: "Nb",
+      index: "41",
+      arrange: "5s^2 4d^3",
+      chinese_name: "铌",
+      weight: 92.91
+    },
+    {
+      name: "Ta",
+      index: "73",
+      arrange: "6s^2 4f^14 5d^3",
+      chinese_name: "钽",
+      weight: 180.9
+    },
+    {
+      name: "Db",
+      index: "105",
+      arrange: "7s^2 5f^14 6d^3",
+      chinese_name: "𬭊*",
+      weight: "(268)"
+    }
+  ],
+  [
+    {
+      name: " ",
+      index: " ",
+      arrange: " ",
+      chinese_name: " ",
+      weight: " "
+    },
+    {
+      name: " ",
+      index: " ",
+      arrange: " ",
+      chinese_name: " ",
+      weight: " "
+    },
+    {
+      name: " ",
+      index: " ",
+      arrange: " ",
+      chinese_name: " ",
+      weight: " "
+    },
+    {
+      name: "Cr",
+      index: "24",
+      arrange: "4s^1 3d^5",
+      chinese_name: "铬",
+      weight: 52.0
+    },
+    {
+      name: "Mo",
+      index: "42",
+      arrange: "5s^1 4d^5",
+      chinese_name: "钼",
+      weight: 95.96
+    },
+    {
+      name: "W",
+      index: "74",
+      arrange: "6s^1 4f^14 5d^5",
+      chinese_name: "钨",
+      weight: 183.8
+    },
+    {
+      name: "Sg",
+      index: "106",
+      arrange: " ",
+      chinese_name: "𬭳*",
+      weight: "(271)"
+    }
+  ],
+  [
+    {
+      name: " ",
+      index: " ",
+      arrange: " ",
+      chinese_name: " ",
+      weight: " "
+    },
+    {
+      name: " ",
+      index: " ",
+      arrange: " ",
+      chinese_name: " ",
+      weight: " "
+    },
+    {
+      name: " ",
+      index: " ",
+      arrange: " ",
+      chinese_name: " ",
+      weight: " "
+    },
+    {
+      name: "Mn",
+      index: "25",
+      arrange: "4s^2 3d^5",
+      chinese_name: "锰",
+      weight: 54.94
+    },
+    {
+      name: "Tc",
+      index: "43",
+      arrange: "5s^2 4d^5",
+      chinese_name: "锝",
+      weight: 98
+    },
+    {
+      name: "Re",
+      index: "75",
+      arrange: "6s^2 4f^14 5d^5",
+      chinese_name: "铼",
+      weight: 186.2
+    },
+    {
+      name: "Bh",
+      index: "107",
+      arrange: " ",
+      chinese_name: "𬭛*",
+      weight: "(270)"
+    }
+  ],
+  [
+    {
+      name: " ",
+      index: " ",
+      arrange: " ",
+      chinese_name: " ",
+      weight: " "
+    },
+    {
+      name: " ",
+      index: " ",
+      arrange: " ",
+      chinese_name: " ",
+      weight: " "
+    },
+    {
+      name: " ",
+      index: " ",
+      arrange: " ",
+      chinese_name: " ",
+      weight: " "
+    },
+    {
+      name: "Fe",
+      index: "26",
+      arrange: "4s^2 3d^6",
+      chinese_name: "铁",
+      weight: 55.85
+    },
+    {
+      name: "Ru",
+      index: "44",
+      arrange: "5s^2 4d^6",
+      chinese_name: "钌",
+      weight: 101.1
+    },
+    {
+      name: "Os",
+      index: "76",
+      arrange: "6s^2 4f^14 5d^6",
+      chinese_name: "锇",
+      weight: 190.2
+    },
+    {
+      name: "Hs",
+      index: "108",
+      arrange: " ",
+      chinese_name: "𬭶*",
+      weight: "(277)"
+    }
+  ],
+  [
+    {
+      name: " ",
+      index: " ",
+      arrange: " ",
+      chinese_name: " ",
+      weight: " "
+    },
+    {
+      name: " ",
+      index: " ",
+      arrange: " ",
+      chinese_name: " ",
+      weight: " "
+    },
+    {
+      name: " ",
+      index: " ",
+      arrange: " ",
+      chinese_name: " ",
+      weight: " "
+    },
+    {
+      name: "Co",
+      index: "27",
+      arrange: "4s^2 3d^7",
+      chinese_name: "钴",
+      weight: 58.93
+    },
+    {
+      name: "Rh",
+      index: "45",
+      arrange: "5s^2 4d^7",
+      chinese_name: "铑",
+      weight: 102.9
+    },
+    {
+      name: "Ir",
+      index: "77",
+      arrange: "6s^2 4f^14 5d^7",
+      chinese_name: "铱",
+      weight: 192.2
+    },
+    {
+      name: "Mt",
+      index: "109",
+      arrange: " ",
+      chinese_name: "鿏*",
+      weight: "(276)"
+    }
+  ],
+  [
+    {
+      name: " ",
+      index: " ",
+      arrange: " ",
+      chinese_name: " ",
+      weight: " "
+    },
+    {
+      name: " ",
+      index: " ",
+      arrange: " ",
+      chinese_name: " ",
+      weight: " "
+    },
+    {
+      name: " ",
+      index: " ",
+      arrange: " ",
+      chinese_name: " ",
+      weight: " "
+    },
+    {
+      name: "Ni",
+      index: "28",
+      arrange: "4s^2 3d^8",
+      chinese_name: "镍",
+      weight: 58.69
+    },
+    {
+      name: "Pd",
+      index: "46",
+      arrange: "5s^2 4d^8",
+      chinese_name: "钯",
+      weight: 106.4
+    },
+    {
+      name: "Pt",
+      index: "78",
+      arrange: "6s^2 4f^14 5d^8",
+      chinese_name: "铂",
+      weight: 195.1
+    },
+    {
+      name: "Ds",
+      index: "110",
+      arrange: " ",
+      chinese_name: "𫟼*",
+      weight: "(281)"
+    }
+  ],
+  [
+    {
+      name: " ",
+      index: " ",
+      arrange: " ",
+      chinese_name: " ",
+      weight: " "
+    },
+    {
+      name: " ",
+      index: " ",
+      arrange: " ",
+      chinese_name: " ",
+      weight: " "
+    },
+    {
+      name: " ",
+      index: " ",
+      arrange: " ",
+      chinese_name: " ",
+      weight: " "
+    },
+    {
+      name: "Cu",
+      index: "29",
+      arrange: "4s^1 3d^{10}",
+      chinese_name: "铜",
+      weight: 63.55
+    },
+    {
+      name: "Ag",
+      index: "47",
+      arrange: "5s^1 4d^{10}",
+      chinese_name: "银",
+      weight: 107.9
+    },
+    {
+      name: "Au",
+      index: "79",
+      arrange: "6s^1 4f^{14} 5d^{10}",
+      chinese_name: "金",
+      weight: 197.0
+    },
+    {
+      name: "Rg",
+      index: "111",
+      arrange: " ",
+      chinese_name: "𬬭*",
+      weight: "(280)"
+    }
+  ],
+  [
+    {
+      name: " ",
+      index: " ",
+      arrange: " ",
+      chinese_name: " ",
+      weight: " "
+    },
+    {
+      name: " ",
+      index: " ",
+      arrange: " ",
+      chinese_name: " ",
+      weight: " "
+    },
+    {
+      name: " ",
+      index: " ",
+      arrange: " ",
+      chinese_name: " ",
+      weight: " "
+    },
+    {
+      name: "Zn",
+      index: "30",
+      arrange: "4s^2 3d^{10}",
+      chinese_name: "锌",
+      weight: 65.38
+    },
+    {
+      name: "Cd",
+      index: "48",
+      arrange: "5s^2 4d^{10}",
+      chinese_name: "镉",
+      weight: 112.4
+    },
+    {
+      name: "Hg",
+      index: "80",
+      arrange: "6s^2 4f^{14} 5d^{10}",
+      chinese_name: "汞",
+      weight: 200.6
+    },
+    {
+      name: "Cn",
+      index: "112",
+      arrange: " ",
+      chinese_name: "鿔*",
+      weight: "(285)"
+    }
+  ],
+  [
+    {
+      name: " ",
+      index: " ",
+      arrange: " ",
+      chinese_name: " ",
+      weight: " "
+    },
+    {
+      name: "B",
+      index: "5",
+      arrange: "2s^2 2p^1",
+      chinese_name: "硼",
+      weight: 10.81
+    },
+    {
+      name: "Al",
+      index: "13",
+      arrange: "3s^2 3p^1",
+      chinese_name: "铝",
+      weight: 26.98
+    },
+    {
+      name: "Ga",
+      index: "31",
+      arrange: "4s^2 3d^10 4p^1",
+      chinese_name: "镓",
+      weight: 69.72
+    },
+    {
+      name: "In",
+      index: "49",
+      arrange: "5s^2 4d^10 5p^1",
+      chinese_name: "铟",
+      weight: 114.8
+    },
+    {
+      name: "Tl",
+      index: "81",
+      arrange: "6s^2 4f^14 5d^10 6p^1",
+      chinese_name: "铊",
+      weight: 204.4
+    },
+    {
+      name: "Nh",
+      index: "113",
+      arrange: " ",
+      chinese_name: "鿭*",
+      weight: "(284)"
+    }
+  ],
+  [
+    {
+      name: " ",
+      index: " ",
+      arrange: " ",
+      chinese_name: " ",
+      weight: " "
+    },
+    {
+      name: "C",
+      index: "6",
+      arrange: "2s^2 2p^2",
+      chinese_name: "碳",
+      weight: 12.01
+    },
+    {
+      name: "Si",
+      index: "14",
+      arrange: "3s^2 3p^2",
+      chinese_name: "硅",
+      weight: 28.09
+    },
+    {
+      name: "Ge",
+      index: "32",
+      arrange: "4s^2 3d^10 4p^2",
+      chinese_name: "锗",
+      weight: 72.63
+    },
+    {
+      name: "Sn",
+      index: "50",
+      arrange: "5s^2 4d^10 5p^2",
+      chinese_name: "锡",
+      weight: 118.7
+    },
+    {
+      name: "Pb",
+      index: "82",
+      arrange: "6s^2 4f^14 5d^10 6p^2",
+      chinese_name: "铅",
+      weight: 207.2
+    },
+    {
+      name: "Fl",
+      index: "114",
+      arrange: " ",
+      chinese_name: "𫓧*",
+      weight: "(289)"
+    }
+  ],
+  [
+    {
+      name: " ",
+      index: " ",
+      arrange: " ",
+      chinese_name: " ",
+      weight: " "
+    },
+    {
+      name: "N",
+      index: "7",
+      arrange: "2s^2 2p^3",
+      chinese_name: "氮",
+      weight: 14.01
+    },
+    {
+      name: "P",
+      index: "15",
+      arrange: "3s^2 3p^3",
+      chinese_name: "磷",
+      weight: 30.97
+    },
+    {
+      name: "As",
+      index: "33",
+      arrange: "4s^2 3d^10 4p^3",
+      chinese_name: "砷",
+      weight: 74.92
+    },
+    {
+      name: "Sb",
+      index: "51",
+      arrange: "5s^2 4d^10 5p^3",
+      chinese_name: "锑",
+      weight: 121.8
+    },
+    {
+      name: "Bi",
+      index: "83",
+      arrange: "6s^2 4f^14 5d^10 6p^3",
+      chinese_name: "铋",
+      weight: 209.0
+    },
+    {
+      name: "Mc",
+      index: "115",
+      arrange: " ",
+      chinese_name: "镆*",
+      weight: "(288)"
+    }
+  ],
+  [
+    {
+      name: " ",
+      index: " ",
+      arrange: " ",
+      chinese_name: " ",
+      weight: " "
+    },
+    {
+      name: "O",
+      index: "8",
+      arrange: "2s^2 2p^4",
+      chinese_name: "氧",
+      weight: 16.0
+    },
+    {
+      name: "S",
+      index: "16",
+      arrange: "3s^2 3p^4",
+      chinese_name: "硫",
+      weight: 32.06
+    },
+    {
+      name: "Se",
+      index: "34",
+      arrange: "4s^2 3d^10 4p^4",
+      chinese_name: "硒",
+      weight: 78.96
+    },
+    {
+      name: "Te",
+      index: "52",
+      arrange: "5s^2 4d^10 5p^4",
+      chinese_name: "碲",
+      weight: 127.6
+    },
+    {
+      name: "Po",
+      index: "84",
+      arrange: "6s^2 4f^14 5d^10 6p^4",
+      chinese_name: "钋",
+      weight: 209
+    },
+    {
+      name: "Lv",
+      index: "116",
+      arrange: " ",
+      chinese_name: "𫟷*",
+      weight: "(293)"
+    }
+  ],
+  [
+    {
+      name: " ",
+      index: " ",
+      arrange: " ",
+      chinese_name: " ",
+      weight: " "
+    },
+    {
+      name: "F",
+      index: "9",
+      arrange: "2s^2 2p^5",
+      chinese_name: "氟",
+      weight: 19.0
+    },
+    {
+      name: "Cl",
+      index: "17",
+      arrange: "3s^2 3p^5",
+      chinese_name: "氯",
+      weight: 35.45
+    },
+    {
+      name: "Br",
+      index: "35",
+      arrange: "4s^2 3d^10 4p^5",
+      chinese_name: "溴",
+      weight: 79.9
+    },
+    {
+      name: "I",
+      index: "53",
+      arrange: "5s^2 4d^10 5p^5",
+      chinese_name: "碘",
+      weight: 126.9
+    },
+    {
+      name: "At",
+      index: "85",
+      arrange: "6s^2 4f^14 5d^10 6p^5",
+      chinese_name: "砹",
+      weight: "(210)"
+    },
+    {
+      name: "Ts",
+      index: "117",
+      arrange: " ",
+      chinese_name: "鿬*",
+      weight: "(294)"
+    }
+  ],
+  [
+    {
+      name: "He",
+      index: "2",
+      arrange: "1s^2",
+      chinese_name: "氦",
+      weight: 4.003
+    },
+    {
+      name: "Ne",
+      index: "10",
+      arrange: "2s^2 2p^6",
+      chinese_name: "氖",
+      weight: 20.18
+    },
+    {
+      name: "Ar",
+      index: "18",
+      arrange: "3s^2 3p^6",
+      chinese_name: "氩",
+      weight: 39.95
+    },
+    {
+      name: "Kr",
+      index: "36",
+      arrange: "4s^2 3d^{10} 4p^6",
+      chinese_name: "氪",
+      weight: 83.8
+    },
+    {
+      name: "Xe",
+      index: "54",
+      arrange: "5s^2 4d^{10} 5p^6",
+      chinese_name: "氙",
+      weight: 131.3
+    },
+    {
+      name: "Rn",
+      index: "86",
+      arrange: "6s^2 4f^{14} 5d^{10} 6p^6",
+      chinese_name: "氡",
+      weight: "(222)"
+    },
+    {
+      name: "Og",
+      index: "118",
+      arrange: " ",
+      chinese_name: "鿫*",
+      weight: "(294)"
+    }
+  ]
+]
+import brightness from "@system.brightness"
+import router from "@system.router"
+let left = 0
+let p_index = 0
+let right = 1
+let pre = 0
+function max(a, b) {
+  if (a > b) return a
+  return b
+}
+function min(a, b) {
+  if (a < b) return a
+  return b
+}
+const trans = {
+  0: "ⅠA",
+  1: "ⅡA",
+  2: "ⅢB",
+  3: "ⅣB",
+  4: "ⅤB",
+  5: "ⅥB",
+  6: "ⅦB",
+  7: "Ⅷ",
+  8: "Ⅷ",
+  9: "Ⅷ",
+  10: "ⅠB",
+  11: "ⅡB",
+  12: "ⅢA",
+  13: "ⅣA",
+  14: "ⅤA",
+  15: "ⅥA",
+  16: "ⅦA",
+  17: "0"
+}
+const electronegativityDict = {
+  1: 2.2, // 氢 (H)
+  2: 0, // 氦 (He)，惰性气体通常不参与化学键形成，因此没有电负性的概念
+  3: 0.98, // 锂 (Li)
+  11: 0.93, // 钠 (Na)
+  19: 0.82, // 钾 (K)
+  37: 0.82, // 铷 (Rb)
+  55: 0.79, // 铯 (Cs)
+  87: 0.7, // 钫 (Fr)，估计值
+  4: 1.57, // 铍 (Be)
+  12: 1.31, // 镁 (Mg)
+  20: 1.0, // 钙 (Ca)
+  38: 0.95, // 锶 (Sr)
+  56: 0.89, // 钡 (Ba)
+  88: 0.9, // 镭 (Ra)，估计值
+  21: 1.36, // 钪 (Sc)
+  39: 1.22, // 钇 (Y)
+  57: 0, // 镧系 (La-Lu)，这个范围包含了多个元素，此处不单独列出
+  89: 0, // 钚系 (Ac-Lr)，这个范围包含了多个元素，此处不单独列出
+  22: 1.54, // 钛 (Ti)
+  40: 1.33, // 锆 (Zr)
+  72: 1.3, // 铪 (Hf)
+  104: 0, // 锏 (Rf)，估计值
+  23: 1.63, // 钒 (V)
+  41: 1.36, // 铌 (Nb)
+  73: 1.3, // 钽 (Ta)
+  105: 0, // 镆 (Db)，估计值
+  24: 1.66, // 铬 (Cr)
+  42: 1.3, // 钼 (Mo)
+  74: 1.3, // 钨 (W)
+  106: 0, // 鎽 (Sg)，估计值
+  25: 1.55, // 锰 (Mn)
+  43: 1.9, // 锝 (Tc)
+  75: 1.9, // 铼 (Re)
+  107: 0, // 锿 (Bh)，估计值
+  26: 1.83, // 铁 (Fe)
+  44: 1.5, // 钌 (Ru)
+  76: 1.6, // 锇 (Os)
+  108: 0, // 海森 (Hs)，估计值
+  27: 1.88, // 钴 (Co)
+  45: 1.52, // 铑 (Rh)
+  77: 1.6, // 铱 (Ir)
+  109: 0, // 麦田 (Mt)，估计值
+  28: 1.91, // 镍 (Ni)
+  46: 1.69, // 钯 (Pd)
+  78: 1.69, // 铂 (Pt)
+  110: 0, // 钅达 (Ds)，估计值
+  29: 1.9, // 铜 (Cu)
+  47: 1.93, // 银 (Ag)
+  79: 1.9, // 金 (Au)
+  111: 0, // 钅仑 (Rg)，估计值
+  30: 1.65, // 锌 (Zn)
+  48: 1.69, // 镉 (Cd)
+  80: 1.9, // 汞 (Hg)
+  112: 0, // 钅联 (Cn)，估计值
+  5: 2.04, // 硼 (B)
+  13: 1.61, // 铝 (Al)
+  31: 1.81, // 镓 (Ga)
+  49: 1.78, // 铟 (In)
+  81: 1.62, // 铊 (Tl)
+  113: 0, // 钅念 (Nh)，估计值
+  6: 2.55, // 碳 (C)
+  14: 1.9, // 硅 (Si)
+  32: 1.8, // 锗 (Ge)
+  50: 1.8, // 锡 (Sn)
+  82: 1.9, // 铅 (Pb)
+  114: 0, // 钅斧 (Fl)，估计值
+  7: 3.04, // 氮 (N)
+  15: 2.19, // 磷 (P)
+  33: 2.18, // 砷 (As)
+  51: 2.05, // 锑 (Sb)
+  83: 2.02, // 铋 (Bi)
+  115: 0, // 钅莫 (Mc)，估计值
+  8: 3.44, // 氧 (O)
+  16: 2.58, // 硫 (S)
+  34: 2.55, // 硒 (Se)
+  52: 2.1, // 碲 (Te)
+  84: 2.0, // 钋 (Po)
+  116: 0, // 钅猁 (Lv)，估计值
+  9: 3.98, // 氟 (F)
+  17: 3.16, // 氯 (Cl)
+  35: 2.96, // 溴 (Br)
+  53: 2.66, // 碘 (I)
+  85: 2.0, // 碘 (At)
+  117: 0, // 钅抧 (Ts)，估计值
+  2: 0, // 氖 (Ne)，惰性气体
+  10: 3.04, // 氖 (Ne)
+  18: 3.4, // 氩 (Ar)
+  36: 3.0, // 氪 (Kr)
+  54: 2.6, // 氙 (Xe)
+  86: 2.2, // 氡 (Rn)
+  118: 0 // 钅奥 (Og)，估计值
+}
+const elementTypes = {
+  1: "非金属", // 氢 (H)
+  2: "稀有气体", // 氦 (He)
+  3: "金属", // 锂 (Li)
+  4: "金属", // 铍 (Be)
+  5: "非金属", // 硼 (B)
+  6: "非金属", // 碳 (C)
+  7: "非金属", // 氮 (N)
+  8: "非金属", // 氧 (O)
+  9: "非金属", // 氟 (F)
+  10: "稀有气体", // 氖 (Ne)
+  11: "金属", // 钠 (Na)
+  12: "金属", // 镁 (Mg)
+  13: "金属", // 铝 (Al)
+  14: "非金属", // 硅 (Si)
+  15: "非金属", // 磷 (P)
+  16: "非金属", // 硫 (S)
+  17: "非金属", // 氯 (Cl)
+  18: "稀有气体", // 氩 (Ar)
+  19: "金属", // 钾 (K)
+  20: "金属", // 钙 (Ca)
+  21: "金属", // 钪 (Sc)
+  22: "金属", // 钛 (Ti)
+  23: "金属", // 钒 (V)
+  24: "金属", // 铬 (Cr)
+  25: "金属", // 锰 (Mn)
+  26: "金属", // 铁 (Fe)
+  27: "金属", // 钴 (Co)
+  28: "金属", // 镍 (Ni)
+  29: "金属", // 铜 (Cu)
+  30: "金属", // 锌 (Zn)
+  31: "金属", // 镓 (Ga)
+  32: "金属", // 锗 (Ge)
+  33: "非金属", // 砷 (As)
+  34: "非金属", // 硒 (Se)
+  35: "非金属", // 溴 (Br)
+  36: "稀有气体", // 氪 (Kr)
+  37: "金属", // 铷 (Rb)
+  38: "金属", // 锶 (Sr)
+  39: "金属", // 钇 (Y)
+  40: "金属", // 锆 (Zr)
+  41: "金属", // 铌 (Nb)
+  42: "金属", // 钼 (Mo)
+  43: "金属", // 锝 (Tc)
+  44: "金属", // 钌 (Ru)
+  45: "金属", // 铑 (Rh)
+  46: "金属", // 钯 (Pd)
+  47: "金属", // 银 (Ag)
+  48: "金属", // 镉 (Cd)
+  49: "金属", // 铟 (In)
+  50: "金属", // 锡 (Sn)
+  51: "非金属", // 锑 (Sb)
+  52: "非金属", // 碲 (Te)
+  53: "非金属", // 碘 (I)
+  54: "稀有气体", // 氙 (Xe)
+  55: "金属", // 铯 (Cs)
+  56: "金属", // 钡 (Ba)
+  57: "金属", // 镧 (La)
+  72: "金属", // 铪 (Hf)
+  73: "金属", // 钽 (Ta)
+  74: "金属", // 钨 (W)
+  75: "金属", // 铼 (Re)
+  76: "金属", // 铱 (Os)
+  77: "金属", // 铱 (Ir)
+  78: "金属", // 铂 (Pt)
+  79: "金属", // 金 (Au)
+  80: "金属", // 汞 (Hg)
+  81: "金属", // 铊 (Tl)
+  82: "金属", // 铅 (Pb)
+  83: "金属", // 铋 (Bi)
+  84: "非金属", // 钋 (Po)
+  85: "非金属", // 砹 (At)
+  86: "稀有气体", // 氡 (Rn)
+  87: "金属", // 钫 (Fr)
+  88: "金属", // 镭 (Ra)
+  89: "金属", // 钋 (Ac)
+  90: "金属", // 铪 (Hf)
+  91: "金属", // 钽 (Ta)
+  92: "金属", // 钨 (W)
+  93: "金属", // 铼 (Re)
+  94: "金属", // 铱 (Os)
+  95: "金属", // 铱 (Ir)
+  96: "金属", // 铂 (Pt)
+  97: "金属", // 金 (Au)
+  98: "金属", // 汞 (Hg)
+  99: "金属", // 铊 (Tl)
+  100: "金属", // 铅 (Pb)
+  101: "金属", // 铋 (Bi)
+  102: "金属", // 钋 (Po)
+  103: "金属", // 砹 (At)
+  104: "金属", // 氡 (Rn)
+  105: "金属", // 钫 (Fr)
+  106: "金属", // 镭 (Ra)
+  107: "金属", // 钋 (Ac)
+  108: "金属", // 铅 (Pb)
+  109: "金属", // 铋 (Bi)
+  110: "金属", // 钋 (Po)
+  111: "金属", // 砹 (At)
+  112: "稀有气体", // 氡 (Rn)
+  113: "金属", // 钫 (Fr)
+  114: "金属", // 镭 (Ra)
+  115: "金属", // 钋 (Ac)
+  116: "金属", // 镭 (Ra)
+  117: "非金属", // 钋 (Ac)
+  118: "稀有气体" // 钅奥 (Og)
+}
+import prompt from "@system.prompt"
+let swiper_present_index = 1
+let swiper_pre_index = 1
+let js_data_present_index = 0
+function move(x) {
+  return (x + 18) % 18
+}
+export default {
+  private: {
+    to_b: {
+      true: "flex",
+      false: "none"
+    },
+    mode: "normal",
+    menuing: false,
+    array: [{id: 0}, {id: 1}, {id: 2}, {id: 3}, {id: 4}, {id: 5}, {id: 6}],
+    array_2: [],
+    local_data: [],
+    head: "",
+    flag: true,
+    ec: {
+      elec: "#0074ff",
+      normal: "#212421"
+    },
+    right: 2,
+    kaiping: true,
+    type_to_background_color: {
+      金属: "#212421",
+      稀有气体: "#212e3b",
+      非金属: "#393d2e"
+    },
+    loading: false,
+    enable_swipe: true,
+    array_3: [
+      {
+        id1: 0,
+        id2: 1,
+        id3: 2
+      },
+      {
+        id1: 3,
+        id2: 4,
+        id3: 5
+      },
+      {
+        id1: 6,
+        id2: 7,
+        id3: 8
+      },
+      {
+        id1: 9,
+        id2: 10,
+        id3: 11
+      },
+      {
+        id1: 12,
+        id2: 13,
+        id3: 14
+      },
+      {
+        id1: 15,
+        id2: 16,
+        id3: 17
+      }
+    ]
+  },
+  change_setting() {
+    console.log("clicked")
+    if (this.mode == "elec") this.mode = "normal"
+    else this.mode = "elec"
+    this.$app.$def.data["mode"] = this.mode
+  },
+  get_data(id, type) {
+    if (id == "La-Lu" || id == "Ac-Lr") {
+      if (type == "elec") return " "
+      if (type == "type") return "金属"
+      if (type == "index") return id
+    }
+    id = Number(id)
+    if (id != NaN) {
+      if (type == "elec") return electronegativityDict[id]
+      if (type == "type") return elementTypes[id]
+      if (type == "head") return trans[id]
+      if (type == "index") {
+        if (id == 0) return "-"
+        else return id
+      }
+    }
+  },
+  head_touched() {
+    this.menuing = !this.menuing
+  },
+  add_data(t) {
+    if (t >= 3) return
+    this.local_data[t] = js_data[t]
+    setTimeout(() => {
+      this.add_data(t + 1)
+    }, 1500)
+  },
+  onInit() {
+    if (this.$app.$def.data["mode"] == "elec" || this.$app.$def.data["mode"] == "normal") {
+      this.mode = this.$app.$def.data["mode"]
+    } else {
+      this.mode = "normal"
+    }
+    /*
+    brightness.setKeepScreenOn({
+      keepScreenOn: true,
+      success: function() {
+        console.log('handling success')
+      },
+      fail: function(data, code) {
+        console.log(`handling fail, code = ${code}`)
+      }
+    })*/
+    setTimeout(() => {
+      this.kaiping = false
+    }, 1500)
+    setTimeout(() => {
+      this.to(0)
+    }, 900)
+    setTimeout(() => {
+      this.$element("swiper").swipeTo({
+        index: 1
+      })
+    }, 200)
+    setTimeout(() => {
+      for (let i = 0; i < 18; ++i) this.local_data.push([])
+      for (let i = 0; i < 18; ++i) this.array_2.push({id: i})
+    }, 100)
+    /*
+      this.local_data[0] = js_data[0];
+      this.local_data[1] = js_data[1];*/
+    this.head = "ⅠA"
+  },
+  to(aim) {
+    aim = Number(aim)
+    this.menuing = false
+    this.loading = true
+    global.runGC()
+    setTimeout(() => {
+      this.local_data[swiper_present_index] = js_data[aim]
+      this.head = trans[aim]
+      js_data_present_index = aim
+      this.local_data[move(swiper_present_index - 1)] = js_data[move(js_data_present_index - 1)]
+      this.local_data[move(swiper_present_index + 1)] = js_data[move(js_data_present_index + 1)]
+    }, 100)
+    setTimeout(() => {
+      this.loading = false
+    }, 1000)
+  },
+  onHide() {
+    global.runGC()
+  },
+  to_setting() {},
+  _blank() {},
+  update_swiper(event) {
+    swiper_present_index = event.index
+    if (
+      swiper_pre_index - swiper_present_index != 1 &&
+      swiper_pre_index - swiper_present_index != -1
+    ) {
+      if (swiper_pre_index < swiper_present_index) {
+        js_data_present_index = move(js_data_present_index - 1)
+        this.local_data[move(swiper_present_index - 1)] = js_data[move(js_data_present_index - 1)]
+      } else {
+        js_data_present_index = move(js_data_present_index + 1)
+        this.local_data[move(swiper_present_index + 1)] = js_data[move(js_data_present_index + 1)]
+      }
+    } else {
+      if (swiper_pre_index > swiper_present_index) {
+        js_data_present_index = move(js_data_present_index - 1)
+        this.local_data[move(swiper_present_index - 1)] = js_data[move(js_data_present_index - 1)]
+      } else {
+        js_data_present_index = move(js_data_present_index + 1)
+        this.local_data[move(swiper_present_index + 1)] = js_data[move(js_data_present_index + 1)]
+      }
+    }
+    setTimeout(() => {
+      if (this.local_data[swiper_present_index].length == 0) {
+        this.local_data[swiper_present_index] = js_data[js_data_present_index]
+      }
+    }, 300)
+    swiper_pre_index = swiper_present_index
+    this.head = trans[js_data_present_index]
+  },
+  swipered(event) {
+    setTimeout(() => {
+      this.update_swiper(event)
+    }, 50)
+  },
+  disable_swipe() {
+    this.loading = true
+    setTimeout(() => {
+      this.loading = false
+    }, 400)
+  },
+  touched(id) {
+    /*
+    let temp = Number(id)
+    if (temp != NaN && temp != 0) {
+      router.push({
+        uri: "/pages/detail",
+        params: {index: id}
+      })
+    }*/
+  },
+  exit(event) {
+    this.$app.exit()
+  }
+}
+</script>
+
+<style>
+.setting_item {
+  position: absolute;
+  top: 497px;
+  right: 6px;
+  width: 160px;
+  height: 65px;
+  background-color: #212421;
+  border-radius: 20px;
+  padding-top: 14px;
+  padding-left: 38px;
+}
+.menu {
+  background-color: rgb(0, 0, 0);
+  position: absolute;
+  right: 0px;
+  width: 170px;
+  height: 100%;
+}
+.button_group {
+  width: 160px;
+  height: 650px;
+  display: flex;
+  position: absolute;
+  flex-direction: column;
+  /* 使子元素竖直排列 */
+}
+.head {
+  position: absolute;
+  top: 0px;
+  width: 192px;
+  height: 70px;
+  background-color: black;
+  color: white;
+  font-size: 32px;
+  left: 0px;
+  text-align: center;
+}
+.page {
+  background-color: black;
+  display: flex;
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#scroll {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.left_index {
+  padding-top: 27px;
+  position: absolute;
+  left: 0px;
+  width: 22px;
+  height: 1200px;
+  display: flex;
+  flex-direction: column;
+  /* 使子元素竖直排列 */
+  background-color: black;
+  margin-top: 70px;
+}
+
+.line {
+  font-size: 30px;
+  color: white;
+  lines: 1;
+  text-overflow: clip;
+}
+
+.cow {
+  display: flex;
+  flex-direction: column;
+  /* 使子元素竖直排列 */
+}
+
+#swiper {
+  indicator-size: 0px;
+  width: 170px;
+  height: 1200px;
+  position: absolute;
+  right: 0px;
+  margin-top: 70px;
+  background-color: black;
+}
+.mask {
+  object-fit: contain;
+  position: absolute;
+  bottom: 0px;
+  width: 192px;
+}
+.element {
+  padding: 15px;
+  margin-left: 3px;
+  margin-top: 6px;
+  width: 160px;
+  border-radius: 20px;
+  background-color: #212421;
+  display: flex;
+  flex-direction: column;
+  height: 150px;
+  /* 使子元素竖直排列 */
+}
+.exit {
+  position: absolute;
+  background-color: rgba(47, 47, 47, 0);
+  bottom: 0px;
+  left: 45.5px;
+  height: 80px;
+  width: 100px;
+  background-image: url("/common/icon-back.png");
+}
+</style>

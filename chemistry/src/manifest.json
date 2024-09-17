@@ -1,0 +1,43 @@
+{
+  "package": "com.genkaim.chemistry.mi9.demo",
+  "name": "元素周期表",
+  "versionName": "1.1.2",
+  "versionCode": 4,
+  "minPlatformVersion": 1000,
+  "icon": "/common/logo.png",
+  "deviceTypeList": [
+    "watch"
+  ],
+  "features": [
+    {
+      "name": "system.router"
+    },
+    {
+      "name": "system.brightness"
+    },
+    {
+      "name": "system.prompt"
+    },
+    {
+      "name": "system.storage"
+    }
+  ],
+  "config": {
+    "logLevel": "log",
+    "designWidth": 192
+  },
+  "router": {
+    "entry": "pages/index",
+    "pages": {
+      "pages/index": {
+        "component": "index"
+      },
+      "pages/detail": {
+        "component": "detail"
+      },
+      "pages/element_chart": {
+        "component": "element_chart"
+      }
+    }
+  }
+}

@@ -1,0 +1,31 @@
+<template>
+  <div class="page">
+    
+  </div>
+</template>
+
+<script>
+import router from "@system.router"
+
+export default {
+  onShow() {
+    router.push({
+      uri: '/pages/element_chart',
+      params: {
+        ___PARAM_LAUNCH_FLAG___: 'clearTask'
+      }
+    })
+  }
+}
+</script>
+
+<style>
+.page {
+  background-color: black;
+  display: flex;
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+</style>

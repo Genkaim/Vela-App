@@ -1,0 +1,33 @@
+<script>
+import storage from '@system.storage' 
+export default {
+  onCreate() {
+    var self = this;
+    storage.get({
+      key: 'mode',
+      success: function(data) {
+        self.data['mode'] = data;
+      },
+      fail: function(data, code) {
+        self.data['mode'] = 'normal';
+      }
+    })
+  },
+  onDestroy() {
+    var self = this;
+    storage.set({
+      key: 'mode',
+      value: self.data['mode'],
+      success: function(data) {
+        console.log('handling success')
+      },
+      fail: function(data, code) {
+        console.log(`handling fail, code = ${code}`)
+      }
+})
+  },
+  data: {
+    mode: 'normal',
+  }
+}
+</script>
